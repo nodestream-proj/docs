@@ -12,6 +12,7 @@ const config = {
   projectName: 'nodestream',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
+  trailingSlash: true,
 
   markdown: {
     mermaid: true,
