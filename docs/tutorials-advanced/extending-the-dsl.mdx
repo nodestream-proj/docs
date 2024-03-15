@@ -13,13 +13,13 @@ Extend the Nodestream DSL to create new ways to collect and process data.
 
 The Nodestream DSL is a powerful way to define how data is collected and modeled as a graph.
 You can extend the DSL to create new ways to collect and process data.
-You can either include these customizations an a [plugin](./building-plugins) or as a part of your own codebase.
+You can either include these customizations an a [plugin](../building-plugins) or as a part of your own codebase.
 
 ## Supporting New File Types
 
-As documented in the [File Extractor Family](../reference/extractors#the-file-extractor-family) section, nodestream supports a variety of file types.
-You can add support for new file types by creating a [new extractor](./new-steps#creating-an-extractor) or by extending the existing extractors by introducing a supported file type.
-It is best to prefer the latter approach but if you need to create a new extractor, you can read the [Creating a New Extractor](./new-steps#creating-an-extractor) section.
+As documented in the [File Extractor Family](../../reference/extractors#the-file-extractor-family) section, nodestream supports a variety of file types.
+You can add support for new file types by creating a [new extractor](../new-steps#creating-an-extractor) or by extending the existing extractors by introducing a supported file type.
+It is best to prefer the latter approach but if you need to create a new extractor, you can read the [Creating a New Extractor](../new-steps#creating-an-extractor) section.
 This section will guide you through the process of creating a new file type support.
 
 ### Implementing a New File Type
@@ -137,10 +137,10 @@ The file extractors will automatically be aware of and use the new file type.
 
 ## Creating an Interpretation
 
-The [Interpreations](../reference/interpreting#interpretations) that are built into nodestream are powerful tools for mapping the data into a graph.
+The [Interpreations](../../reference/interpreting#interpretations) that are built into nodestream are powerful tools for mapping the data into a graph.
 However, you may need to create a new interpretation to handle a specific use case.
 This section will guide you through the process of creating a new interpretation.
-Before venturing down this path, it is recommended to read the [Interpreting References](../reference/interpreting) as well as the [Source Node](../tutorials-intermediate/source-nodes) and [Relationship Building](../tutorials-intermediate/relationship-building-techniques) tutorials thoroughly to understand the concepts, best practices, and the existing interpretations.
+Before venturing down this path, it is recommended to read the [Interpreting References](../../reference/interpreting) as well as the [Source Node](../../tutorials-intermediate/source-nodes) and [Relationship Building](../../tutorials-intermediate/relationship-building-techniques) tutorials thoroughly to understand the concepts, best practices, and the existing interpretations.
 
 ### Implementing a New Interpretation
 
@@ -270,7 +270,7 @@ The interpretations will automatically be aware of and use the new interpretatio
 ## Creating a Normalizer
 
 A `Normalizer` allows you to clean data extracted by a `ValueProvider`. They are intended to provided stateless, simple
-transformations of data. Nodestream has some built in ones that you can view [here](../reference/interpreting#normalizers).
+transformations of data. Nodestream has some built in ones that you can view [here](../../reference/interpreting#normalizers).
 
 For example, assume that you have numeric numbers that should be rounded to a whole number before being used.
 Let's build a normalizer that does this for us.
@@ -346,7 +346,7 @@ The `entry_point` should be a module that contains at least one `Normalizer` cla
 ### Using a Normalizer
 
 You can now use your normalizer in sections that handle normalization flags. For more information,
-see the [Interpretation's reference](../reference/interpreting). For example, if you are using this
+see the [Interpretation's reference](../../reference/interpreting). For example, if you are using this
 in a source node interpretation, you could use it as follows:
 
 ```yaml
@@ -362,7 +362,7 @@ interpretations:
 ## Creating an Argument Resolver
 
 A ArgumentResolver allows you to inline a value into the Pipeline or project file before the pipeline is initialized.
-For more information, see the [Configuring Projects and Pipelines](../tutorials-intermediate/configuring-projects).
+For more information, see the [Configuring Projects and Pipelines](../../tutorials-intermediate/configuring-projects).
 This can be useful for passing configuration from files, environment, secret stores, and the like.
 
 ### Implementing a New Argument Resolver
@@ -435,7 +435,7 @@ The `entry_point` should be a module that contains at least one argument resolve
 
 ### Using an Argument Resolver
 
-You can now use your argument resolver in sections that handle argument resolution. For more information, see the [Configuring Projects and Pipelines](../tutorials-intermediate/configuring-projects). For example, if you are using this in a pipeline file, you could use it as follows:
+You can now use your argument resolver in sections that handle argument resolution. For more information, see the [Configuring Projects and Pipelines](../../tutorials-intermediate/configuring-projects). For example, if you are using this in a pipeline file, you could use it as follows:
 
 ```yaml
 arguments:

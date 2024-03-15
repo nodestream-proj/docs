@@ -107,7 +107,7 @@ Here's an example of indexing the `email` field:
 
 You may be wondering why its called `additional_indexes` and not just `indexes`.
 Nodestream auotomatically indexes certain fields such as the `last_ingested_at` timestamp as well as the fields used in the `key` clause.
-Also note that, the behavior of the `additional_indexes` clause as well as indexes automatically created by nodestream depends on the underlying graph database. See the documentation for your specific graph database for more information [here](../category/database-support).
+Also note that, the behavior of the `additional_indexes` clause as well as indexes automatically created by nodestream depends on the underlying graph database. See the documentation for your specific graph database for more information [here](../../category/database-support).
 
 :::note
 
@@ -150,4 +150,4 @@ The `additional_types` clause is a list, so you can add multiple types if you ne
 
 ### Defining Relationships
 
-The [next guide](./relationship-building-techniques) will cover how to define relationships between nodes.
+The [next guide](../relationship-building-techniques) will cover how to define relationships between nodes.

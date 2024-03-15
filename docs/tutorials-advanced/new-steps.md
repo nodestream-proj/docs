@@ -133,7 +133,7 @@ The output would be:
 ## Creating a Filter
 
 Nodestream has a number of built-in filters that can be used to filter data in a variety of ways.
-For information on those see the guide on [Filtering Data](../tutorials-intermediate/filtering-data) or the [Filters Reference](../reference/filters).
+For information on those see the guide on [Filtering Data](../../tutorials-intermediate/filtering-data) or the [Filters Reference](../../reference/filters).
 
 However, you may have a need to filter data in a way that is not supported by the built-in filters.
 In this case, you can create a new filter to filter the data.

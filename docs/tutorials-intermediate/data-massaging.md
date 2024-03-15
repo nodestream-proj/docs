@@ -47,7 +47,7 @@ If you want to disable this, you can set it to `false`:
 Of course, you may also combine a series of flags together.
 The order of normalization flags is not guaranteed, so be careful when combining flags that depend on the order of operations.
 If that is the case, you may want to use a transformer to normalize the data before interpreting it.
-See [Creating Custom Transformers](../tutorials-advanced/building-new-processing-steps#creating-a-transformer) for more information.
+See [Creating Custom Transformers](../../tutorials-advanced/new-steps#creating-a-transformer) for more information.
 
 ```yaml
 - type: source_node

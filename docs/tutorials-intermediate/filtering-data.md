@@ -6,7 +6,7 @@ sidebar_position: 4
 
 Sometimes you may want to filter the data in your dataset to only include certain records. 
 Nodestream provide some inbuilt filtering methods to help you do this.
-Note if none of the inbult filtering methods meet your needs, you can always [create your own filter](../tutorials-advanced/building-new-processing-steps#creating-a-filter).
+Note if none of the inbult filtering methods meet your needs, you can always [create your own filter](../../tutorials-advanced/new-steps#creating-a-filter).
 
 
 ## Including Records By Field Values
@@ -61,7 +61,7 @@ The `fields` argument is a list of fields to filter on. Each field is an object 
 
 - `value`: A value to use to filter the records. Likely this will be a JMESPath expression into your record.
 - `possibilities`: A list of values to match against. If the value of the field matches any of these possibilities, the record will be included in the output dataset.
-- `normalization` (optional): A set of [normalization](./data-massaging#normalization-flags) rules to apply to the field value before matching. This can be useful if you want to match on a case-insensitive basis, for example.
+- `normalization` (optional): A set of [normalization](../data-massaging#normalization-flags) rules to apply to the field value before matching. This can be useful if you want to match on a case-insensitive basis, for example.
 
 
 With this knowledge, you can build quite complex filters. 
@@ -128,7 +128,7 @@ The same options are available for this filter as for the `ValuesMatchPossibilit
 - `fields`: A list of fields to filter on. Each field is an object with the following properties:
   - `value`: A value to use to filter the records. Likely this will be a JMESPath expression into your record.
   - `possibilities`: A list of values to match against. If the value of the field matches any of these possibilities, the record will be excluded from the output dataset.
-  - `normalization` (optional): A set of [normalization](./data-massaging#normalization-flags) rules to apply to the field value before matching. This can be useful if you want to match on a case-insensitive basis, for example.
+  - `normalization` (optional): A set of [normalization](../data-massaging#normalization-flags) rules to apply to the field value before matching. This can be useful if you want to match on a case-insensitive basis, for example.
 
 
 ## Including Records With Regex

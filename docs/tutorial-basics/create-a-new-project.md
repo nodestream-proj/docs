@@ -6,14 +6,7 @@ sidebar_position: 1
 Get started with Nodestream by creating a new project.
 
 
-Welcome to Nodestream! In this tutorial, we'll walk you through creating a new Nodestream project. We'll cover the following topics:
-
-- [Create A Project](#create-a-project)
-  - [Installation](#installation)
-  - [Create A New Project](#create-a-new-project)
-  - [Touring the Project](#touring-the-project)
-    - [File Structure](#file-structure)
-    - [`nodestream.yaml`](#nodestreamyaml)
+Welcome to Nodestream! In this tutorial, we'll walk you through creating a new Nodestream project. 
 
 ## Installation
 
@@ -30,7 +23,7 @@ nodestream new my_project
 
 By default, the `nodestream new` will configure the project to use neo4j as the database.
 If you prefer to use a different database, you can specify it with the `--database` option.
-You can read more about the available options in the [Databases](../category/database-support) section.
+You can read more about the available options in the [Databases](../../category/database-support) section.
 You can also configure the use of multiple or different databases in your project later.
 
 ```bash
@@ -82,6 +75,6 @@ targets:
 ```
 
 This file contains the configuration for your project's scopes and targets. 
-We'll cover these in more detail in the [Managing Your Project](./managing-your-project) section.
+We'll cover these in more detail in the [Managing Your Project](../managing-your-project) section.
 For now, you can see that a `default` scope is configured to house the `sample.yaml` pipeline and a target called `my-db` is configured to use neo4j as the database.
 

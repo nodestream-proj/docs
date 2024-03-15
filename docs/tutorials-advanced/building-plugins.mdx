@@ -31,7 +31,7 @@ A plugin can be more than one type at once or completely unique.
 
 Project plugins are plugins that allow a developer to modify, extend, or in otherwise interact with the consumers project.
 Commonly this is to add new pipelines to a project that are logically very similar to one another.
-Our [Akamai](../official-plugins/akamai) plugin is a good example of this.
+Our [Akamai](../../official-plugins/akamai) plugin is a good example of this.
 It adds a set of pipelines that are all related to the Akamai platform.
 
 ### Component Plugins
@@ -40,11 +40,11 @@ Component plugins are plugins that add new components to the nodestream platform
 This could be new filters, extractors, or other components that can be used in pipelines.
 This could also be a set of components that are logically related to one another.
 
-Our [Akamai](../official-plugins/akamai) plugin is also a good example of this.
+Our [Akamai](../../official-plugins/akamai) plugin is also a good example of this.
 In order to interact with the Akamai platform, we need to be able to authenticate with its apis and make requests.
 Therfore the Akamai plugin adds a set of extractors that are all related to the Akamai platform.
 
-Another, more pure example, is our [Shell](../official-plugins/shell) plugin.
+Another, more pure example, is our [Shell](../../official-plugins/shell) plugin.
 This plugin adds a single component that allows you to run shell commands as part of a pipeline.
 
 ### Utility Plugins
@@ -52,7 +52,7 @@ This plugin adds a single component that allows you to run shell commands as par
 Utility plugins are all about making the developers life easier.
 This could include things like adding audits or other utilities to the developer
 
-Our [Pedantic](../official-plugins/pedantic) and [DotEnv](../official-plugins/dotenv) plugins are good examples of this.
+Our [Pedantic](../../official-plugins/pedantic) and [DotEnv](../../official-plugins/dotenv) plugins are good examples of this.
 The Pedantic plugin adds a set of audits that can be used to enforce a set of naming conventions while the DotEnv plugin allows you to interact source .env file at project runtime.
 
 ### Database Plugins
@@ -61,7 +61,7 @@ Database plugins are plugins that allow you to interact with a database.
 These are generally the most complex plugins as they require a lot of setup, configuration, and testing.
 They also require an understanding of the database that you are interacting with.
 
-Our [Neo4j](../databases/neo4j) and [Neptune](../databases/neptune) support are implementations of this type of plugin.
+Our [Neo4j](../../databases/neo4j) and [Neptune](../../databases/neptune) support are implementations of this type of plugin.
 
 ## Plugin Structure
 
@@ -277,7 +277,7 @@ implementation: great_plugin.my_extractor.MyExtractor
 ### Extra Functionality
 
 For the specifics of what entry points you need to define, you will need to refer to the documentation for the specific extension point you are implementing.
-These can be found in the [Extending the CLI](./extending-the-cli) and [Extending the DSL](./extending-the-dsl) sections of the documentation.
+These can be found in the [Extending the CLI](../extending-the-cli) and [Extending the DSL](../extending-the-dsl) sections of the documentation.
 
 ## Packaging and Publishing
 

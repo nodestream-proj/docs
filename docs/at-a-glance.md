@@ -15,7 +15,7 @@ To accomplish this, Nodestream uses a number of core concepts, including pipelin
 These tools together describe the venacular of nodestream and its Domain Specific Language (DSL).
 
 
-The goal of this document is to provide a high-level overview of the core concepts in Nodestream. It is not intended to be a guide or a tutorial, but rather a reference for understanding the core concepts. If thats what you are looking for, **check out the** [Tutorial Series](./tutorials-basics/create-a-new-project) starting with creating a new project.
+The goal of this document is to provide a high-level overview of the core concepts in Nodestream. It is not intended to be a guide or a tutorial, but rather a reference for understanding the core concepts. If thats what you are looking for, **check out the** [Tutorial Series](../tutorial-basics/create-a-new-project) starting with creating a new project.
 
 ## Core Concepts
 
@@ -54,7 +54,7 @@ If you have big data or complex transformations, you should consider using a too
 ### Extractors
 
 Extractors are the first step in a pipeline.
-They are responsible for getting data from somewhere and producing records. Records are just dictionaries of data that are passed through the pipeline. And nodstream [has a bunch built in](reference/extractors).
+They are responsible for getting data from somewhere and producing records. Records are just dictionaries of data that are passed through the pipeline. And nodstream [has a bunch built in](../reference/extractors).
 
 ### Transformers and Filters
 
@@ -165,4 +165,4 @@ It is a way to organize your pipelines into logical groups.
 For example, you might have a `crons` scope for pipelines that are run on a schedule, and a `manual` scope for pipelines that are run on demand.
 
 
-If you are interested in diving deeper into project configuration, **check out the** [Project Configuration Tutorial](./tutorials-intermediate/configuring-projects).
+If you are interested in diving deeper into project configuration, **check out the** [Project Configuration Tutorial](../tutorials-intermediate/configuring-projects).

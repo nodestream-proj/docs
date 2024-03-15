@@ -8,7 +8,7 @@ Technical documentation that may be misconstrued as life advice.
 ## Introduction
 This tutorial covers advanced techniques for working with the `relationship` interpretation in `nodestream`.
 
-The `nodestream` Interpreter works off the concept of the [Source Node](./source-nodes).
+The `nodestream` Interpreter works off the concept of the [Source Node](../source-nodes).
 This is the node that is conceptually at the center of the data being ingested.
 Since a relationship is defined in terms of the two nodes it connects, all we need to do after we have defined our source node is to define the other node that the source node is connected to.
 

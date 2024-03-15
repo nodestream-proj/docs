@@ -6,15 +6,7 @@ sidebar_position: 3
 Let's build an org chart with Nodestream.
 
 In this tutorial, we'll walk you through creating a new pipeline in your Nodestream project. 
-We'll cover the following topics:
 
-- [Create A New Pipeline](#create-a-new-pipeline)
-  - [Describing the Data Model](#describing-the-data-model)
-  - [Loading Data File](#loading-data-file)
-  - [Interpteting Data Into Nodes and Relationships](#interpteting-data-into-nodes-and-relationships)
-    - [Source Node Interpretation](#source-node-interpretation)
-    - [Relationship Interpretation](#relationship-interpretation)
-  - [Next Steps](#next-steps)
 
 ## Describing the Data Model
 
@@ -92,7 +84,7 @@ TODO: Make these links to the appropriate sections in the documentation
 
 :::note 
 
-You are NOT limited to CSV files. Nodestream has many extractors that can load data from a variety of sources. Read more about [extractors](../reference/extractors.md) in the documentation. 
+You are NOT limited to CSV files. Nodestream has many extractors that can load data from a variety of sources. Read more about [extractors](../../reference/extractors) in the documentation. 
 
 :::
 

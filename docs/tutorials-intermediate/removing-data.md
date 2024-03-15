@@ -51,4 +51,4 @@ The same can be done for relationships:
         expiry_in_hours: 48
 ```
 
-Please see the [TimeToLiveConfigurationExtractor](../reference/extractors#timetoliveconfigurationextractor) for more information.
+Please see the [TimeToLiveConfigurationExtractor](../../reference/extractors#timetoliveconfigurationextractor) for more information.

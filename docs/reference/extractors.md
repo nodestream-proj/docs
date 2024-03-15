@@ -1,7 +1,7 @@
 # Extractors
 
 Extractors are the start of a pipeline and are used to pull raw data from a source.
-Nodestream has a number of extractors built in and you can also [create your own](../tutorials-advanced/building-new-processing-steps#creating-a-new-extractor).
+Nodestream has a number of extractors built in and you can also [create your own](../../tutorials-advanced/new-steps/#creating-an-extractor).
 
 ## The File Extractor Family
 

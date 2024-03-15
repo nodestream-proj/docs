@@ -6,12 +6,7 @@ sidebar_position: 2
 Examine, add, and remove pipelines.
 
 
-In this tutorial, we'll walk you through managing your Nodestream project. We'll cover the following topics:
-
-- [Managing Your Project](#managing-your-project)
-  - [Viewing the State of Your Project](#viewing-the-state-of-your-project)
-  - [Removing a Pipeline](#removing-a-pipeline)
-  - [Adding a Pipeline](#adding-a-pipeline)
+In this tutorial, we'll walk you through managing your Nodestream project.
 
 ## Viewing the State of Your Project
 

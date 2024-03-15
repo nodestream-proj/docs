@@ -5,7 +5,7 @@ This release marks the largest update to Nodestream since its inception.
 We've spent a lot of time improving the core of nodestream and we're excited to share it with you.
 
 Before we get into the details, we want to thank the community for their support and feedback. 
-As such, we have completely revamped the documentation to make it easier to use and navigate. See [here](./2024-03-04-welcome) for more information.
+As such, we have completely revamped the documentation to make it easier to use and navigate.
 This releases comes with two headline features [Database Migrations](#database-migrations) and [Multi-Database Support](#multi-database-support).
 
 ## Database Migrations 

@@ -48,7 +48,7 @@ We can use the `!env` argument resolver to inject the configuration at runtime.
 Now, we can set the `API_ENDPOINT` environment variable to `https://example.com/people` in production, and `https://example.com/people-dev` in development.
 
 NOTE: If you are looking to inject environment variables from a `.env` file, you can use the `nodestream-plugin-dotenv` package to load the `.env` file and inject the environment variables into the process.
-Read more [here](../official-plugins/dotenv).
+Read more [here](../../official-plugins/dotenv).
 
 ### Injecting File Contents with `!include`
 
@@ -130,7 +130,7 @@ Annotations are displayed when you run `nodestream show` and especially useful i
 ### Targets
 Targets are a destination Graph Database for the output of a pipeline.
 For each target you can specify the connection details and credentials.
-The configuration is highly dependent on the target database type, so it is best to refer to the documentation for the target database you are using [here](../category/database-support/).
+The configuration is highly dependent on the target database type, so it is best to refer to the documentation for the target database you are using [here](../../category/database-support/).
 
 ```yaml
 # nodestream.yaml

@@ -69,7 +69,7 @@ It is defined in the following schema:
 | Key        | Description                                                                                                                                                        | Type     | Default | Required |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- | ------- | -------- |
 | `database` | The type of the target. This is used to determine which backend to use to communicate to the database.                                                             | `String` | N/A     | Yes      |
-| `**config` | Additional key, values on the object are directly passed to the backend. See the [database documentation](../databases/) for more information on how to configure. | `Map`    | `{}`    | No       |
+| `**config` | Additional key, values on the object are directly passed to the backend. See the [database documentation](../../category/database-support/) for more information on how to configure. | `Map`    | `{}`    | No       |
 
 ### Plugin
 

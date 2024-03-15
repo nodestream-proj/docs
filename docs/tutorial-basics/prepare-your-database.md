@@ -8,13 +8,6 @@ Configure your database for use with Nodestream.
 
 In this tutorial, we'll walk you through preparing your database for use with Nodestream.
 
-We'll cover the following topics:
-
-- [Prepare Your Database](#prepare-your-database)
-  - [Database Migrations](#database-migrations)
-  - [Generating Database Migrations](#generating-database-migrations)
-  - [Configuring Your Database Connection](#configuring-your-database-connection)
-  - [Running Migrations](#running-migrations)
 
 ## Database Migrations
 
@@ -79,11 +72,11 @@ docker run \
     neo4j:5
 ```
 
-**WARNING:** Do not use the default credentials or credentials that are stored in your source code in a production (or really any) environment. Always use environment variables or a secrets manager to store your credentials. Read more about this [here](../tutorials-intermediate/configuring-projects).
+**WARNING:** Do not use the default credentials or credentials that are stored in your source code in a production (or really any) environment. Always use environment variables or a secrets manager to store your credentials. Read more about this [here](../../tutorials-intermediate/configuring-projects).
 
 :::note 
 
-Always check the database specific documentation for all prerequisites and configuration options [here](../category/database-support).
+Always check the database specific documentation for all prerequisites and configuration options [here](../../category/database-support).
 
 :::
 
