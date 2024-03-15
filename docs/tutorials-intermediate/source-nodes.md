@@ -150,4 +150,4 @@ The `additional_types` clause is a list, so you can add multiple types if you ne
 
 ### Defining Relationships
 
-The [next guide](./relationship-building-techniques.md) will cover how to define relationships between nodes.
+The [next guide](./relationship-building-techniques) will cover how to define relationships between nodes.

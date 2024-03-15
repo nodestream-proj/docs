@@ -30,7 +30,7 @@ nodestream new my_project
 
 By default, the `nodestream new` will configure the project to use neo4j as the database.
 If you prefer to use a different database, you can specify it with the `--database` option.
-You can read more about the available options in the [Databases](./databases.md) section.
+You can read more about the available options in the [Databases](../category/database-support) section.
 You can also configure the use of multiple or different databases in your project later.
 
 ```bash
@@ -82,6 +82,6 @@ targets:
 ```
 
 This file contains the configuration for your project's scopes and targets. 
-We'll cover these in more detail in the [Managing Your Project](./managing-your-project.md) section.
+We'll cover these in more detail in the [Managing Your Project](./managing-your-project) section.
 For now, you can see that a `default` scope is configured to house the `sample.yaml` pipeline and a target called `my-db` is configured to use neo4j as the database.
 

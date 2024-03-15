@@ -48,7 +48,7 @@ We can use the `!env` argument resolver to inject the configuration at runtime.
 Now, we can set the `API_ENDPOINT` environment variable to `https://example.com/people` in production, and `https://example.com/people-dev` in development.
 
 NOTE: If you are looking to inject environment variables from a `.env` file, you can use the `nodestream-plugin-dotenv` package to load the `.env` file and inject the environment variables into the process.
-Read more [here](../official-plugins/dotenv.md).
+Read more [here](../official-plugins/dotenv).
 
 ### Injecting File Contents with `!include`
 

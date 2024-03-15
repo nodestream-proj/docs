@@ -15,7 +15,7 @@ To accomplish this, Nodestream uses a number of core concepts, including pipelin
 These tools together describe the venacular of nodestream and its Domain Specific Language (DSL).
 
 
-The goal of this document is to provide a high-level overview of the core concepts in Nodestream. It is not intended to be a guide or a tutorial, but rather a reference for understanding the core concepts. If thats what you are looking for, **check out the** [Tutorial Series](./tutorials-basics.create-a-new-project.md) starting with creating a new project.
+The goal of this document is to provide a high-level overview of the core concepts in Nodestream. It is not intended to be a guide or a tutorial, but rather a reference for understanding the core concepts. If thats what you are looking for, **check out the** [Tutorial Series](./tutorials-basics/create-a-new-project) starting with creating a new project.
 
 ## Core Concepts
 
@@ -115,7 +115,7 @@ For example, from our previous example, we have an interpreter that creates a no
           number: !jmespath index
 ```
 
-If you want to dive deeper into the interpretation system, **check out the** [Source Node Model](../tutorials-intermediate/source-nodes.md) and [Relationship Building](../tutorials-intermediate/relationship-building-techniques.md) tutorials.
+If you want to dive deeper into the interpretation system, **check out the** [Source Node Model](../tutorials-intermediate/source-nodes) and [Relationship Building](../tutorials-intermediate/relationship-building-techniques) tutorials.
 
 ### Migrations
 
