@@ -1,0 +1,107 @@
+---
+sidebar_position: 4
+---
+
+# Prepare Your Database
+Configure your database for use with Nodestream.
+
+
+In this tutorial, we'll walk you through preparing your database for use with Nodestream.
+
+We'll cover the following topics:
+
+- [Prepare Your Database](#prepare-your-database)
+  - [Database Migrations](#database-migrations)
+  - [Generating Database Migrations](#generating-database-migrations)
+  - [Configuring Your Database Connection](#configuring-your-database-connection)
+  - [Running Migrations](#running-migrations)
+
+## Database Migrations
+
+Nodestream uses a concept called "database migrations" to manage changes to your database schema over time.
+Despite graph databases generally not having an enforced schema, `nodestream` uses a schema to define the structure of your data.
+Additionally, it uses migrations to suggest indexe and constraints to the database to improve performance and data integrity (e.g. unique constraints) where the database supports it.
+As your application evolves, you'll need to make changes to your database schema to accommodate new features or bug fixes.
+In nodestream this is achieved by making changes to your pipelines file.
+Nodestream will then generate the necessary migrations for you.
+
+## Generating Database Migrations
+
+To generate a new migration, run the following command:
+
+```bash
+nodestream migrations make
+```
+
+When you run this command, Nodestream will generate a new migration file in the `migrations` directory of your project.
+The file will contain a list of operations that need to be performed to bring your database schema up to date.
+In the case of a new project, the migration will contain the operations to create the initial schema.
+
+The output of the command will look something like this:
+
+```plaintext
+Which will produce output like this:
+
+Generated migration 20240209081151.
+The migration contains 4 schema changes.
+  - Create node type Employee
+  - Add additional index for node type Employee on field last_ingested_at
+  - Create relationship type REPORTS_TO
+  - Add additional index for relationship type REPORTS_TO on field last_ingested_at
+Migration written to migrations/20240209081151.yaml
+Run `nodestream migrations run` to apply the migration.
+```
+
+## Configuring Your Database Connection
+
+Before you can run the migrations or a pipeline, you'll need to configure your database connection.
+To do this, open the `nodestream.yaml` file in the root of your project and add you should see a section like this:
+
+```yaml
+targets:
+  my-db:
+    database: neo4j
+    password: neo4j123
+    uri: bolt://localhost:7687
+    username: neo4j
+```
+
+Replace the `uri`, `username`, and `password` with the connection details for your database.
+
+If you just want to get up and running quickly, you can use run this docker command to start a local Neo4j instance with the same default credentials:
+
+```bash
+docker run \
+    --restart always \
+    --publish=7474:7474 --publish=7687:7687 \
+    --env NEO4J_AUTH=neo4j/neo4j123 \
+    --env NEO4J_PLUGINS='["apoc","bloom"]' \
+    neo4j:5
+```
+
+**WARNING:** Do not use the default credentials or credentials that are stored in your source code in a production (or really any) environment. Always use environment variables or a secrets manager to store your credentials. Read more about this [here](../tutorials-intermediate/configuring-projects).
+
+:::note 
+
+Always check the database specific documentation for all prerequisites and configuration options [here](../category/database-support).
+
+:::
+
+
+## Running Migrations
+
+To run the migrations we just created, run the following command:
+
+```bash
+nodestream migrations run --target my-db
+```
+
+When you run this command, Nodestream will apply all pending migrations to your database and bring your schema up to date.
+
+The output of the command will look something like this:
+
+```plaintext
+ - Migrations executed on target my-db.
+```
+
+That's it! Your database is now ready to use with Nodestream.

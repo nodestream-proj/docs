@@ -1,0 +1,8 @@
+{
+  "label": "Database Support",
+  "position": 7,
+  "link": {
+    "type": "generated-index",
+    "description": "Learn about the database support in the framework."
+  }
+}

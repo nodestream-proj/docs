@@ -1,0 +1,238 @@
+---
+sidebar_position: 5
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+
+# Extending the CLI
+
+The Nodestream CLI is built to be extensible.
+You can add new functionality to the CLI to suit your development needs.
+You can either include these customizations an a [plugin](./building-plugins) or as a part of your own codebase.
+
+## Audits
+Audits are a way to run a series checks on your project.
+For instance, you can build an audit to check that naming conventions are being followed, or that certain fields are present in your data.
+
+
+### Creating an Audit
+
+Audits are implemented as a class that inherits from `nodestream.project.audits:Audit`.
+
+```python
+from nodestream.project import Project
+from nodestream.project.audits import Audit
+
+class MyAudit(Audit):
+    name = "my-audit"
+
+    async def run(self, project: Project):
+        # Your audit logic here
+        pass
+```
+
+The `Audit` base class has several methods that you can call to report the results of your audit.
+
+- `self.success(message: str)` - Report a successful audit finding
+- `self.failure(message: str)` - Report a failed audit finding
+- `self.warning(message: str)` - Report a warning audit finding
+
+For example, you can check that a certain field is present in every type definition in your schema:
+
+```python
+from nodestream.project import Project
+
+class FieldPresenceAudit(Audit):
+    name = "field-presence"
+    description = "Check that a certain field is present in every type definition"
+
+    async def run(self, project: Project):
+        schema = project.get_schema()
+        for node_type in schema.node_types:
+            if "my_field" not in node_type.properties:
+                self.failure(f"Field 'my_field' is missing from {node_type.name}")
+
+        if self.failure_count == 0:
+            self.success("All node types have the 'my_field' field")
+```
+
+### Registering an Audit
+
+Audits are registered via the [entry_points](https://setuptools.pypa.io/en/latest/userguide/entry_point.html#entry-points-for-plugins) API of a Python Package.
+Specifically, the `entry_point` named `audits` inside of the `nodestream.plugins` group is loaded.
+The entry point provided should be a module which has atleast one subclass of `nodestream.project.audits:Audit` as directed above.
+Each subclass will be registered as an audit. The `name` attribute of the class will be used as the name of the audit.
+
+Depending on how you are building your package, you can register your audit plugin in one of the following ways:
+
+
+<Tabs
+  defaultValue="pyproject"
+  values={[
+    {label: 'pyproject.toml', value: 'pyproject'},
+    {label: 'poetry', value: 'poetry'},
+    {label: 'setup.cfg', value: 'setup-cfg'},
+    {label: 'setup.py', value: 'setup-py'},
+  ]}>
+  <TabItem value="pyproject">
+    ```toml
+    [project.entry-points."nodestream.plugins"]
+    audits = "my_python_package.audits"
+    ```
+  </TabItem>
+  <TabItem value="poetry">
+    ```toml
+    [tool.poetry.plugins."nodestream.plugins"]
+    audits = "my_python_package.audits"
+    ```
+  </TabItem>
+  <TabItem value="setup-cfg">
+    ```ini
+    [options.entry_points]
+    nodestream.plugins =
+        audits = my_python_package.audits
+    ```
+  </TabItem>
+  <TabItem value="setup-py">
+    ```python
+    from setuptools import setup
+
+    setup(
+        # ...,
+        entry_points = {
+            'nodestream.plugins': [
+                'audits = nodestream_plugin_cool.audits',
+            ]
+        }
+    )
+    ```
+  </TabItem>
+</Tabs>
+
+### Running an Audit
+
+Once you have registered your audit, you can run it using the `nodestream audit` command.
+
+```bash
+nodestream audit my-audit
+```
+
+:::note
+
+You must run the command from an environment that has your package installed so that the entry point is registered.
+
+:::
+
+
+## Creating a Command
+
+Commands are a more general way to extend the CLI.
+You can create a command to perform any action you need.
+Commands are built on top of [cleo](https://cleo.readthedocs.io/en/latest/), a Python package for building command-line applications.
+
+### Creating a Command
+
+Commands are implemented as a class that inherits from `nodestream.cli:NodestreamCommand`.
+
+```python
+from cleo.helpers import option
+
+from nodestream.cli import NodestreamCommand
+
+class MyCommand(NodestreamCommand):
+    name = "my-command"
+    description = "My custom command"
+    options = [option("my-option", None, "My custom option")]
+
+    async def handle_async(self):
+        # Your command logic here
+        pass
+```
+
+Similar to audits, you may want to work with the project in your command.
+Access to the project is provided via the `get_project` method.
+You will have to add the project option to your command to allow users to override the project path.
+
+```python
+from nodestream.cli import NodestreamCommand
+from nodestream.cli.commands.shared_options import PROJECT_FILE_OPTION
+
+class MyCommand(NodestreamCommand):
+    name = "my-command"
+    description = "My custom command"
+    options = [PROJECT_FILE_OPTION]
+
+    async def handle_async(self):
+        project = self.get_project()
+        # Your command logic here
+        pass
+```
+
+### Registering a Command
+
+Commands are registered via the [entry_points](https://setuptools.pypa.io/en/latest/userguide/entry_point.html#entry-points-for-plugins) API of a Python Package.
+Specifically, the `entry_point` named `commands` inside of the `nodestream.plugins` group is loaded.
+The entry point provided should be a module which has atleast one subclass of `nodestream.cli:NodestreamCommand` as directed above.
+Each subclass will be registered as a command.
+
+Depending on how you are building your package, you can register your commands plugin in one of the following ways:
+
+
+<Tabs
+  defaultValue="pyproject"
+  values={[
+    {label: 'pyproject.toml', value: 'pyproject'},
+    {label: 'poetry', value: 'poetry'},
+    {label: 'setup.cfg', value: 'setup-cfg'},
+    {label: 'setup.py', value: 'setup-py'},
+  ]}>
+  <TabItem value="pyproject">
+    ```toml
+    [project.entry-points."nodestream.plugins"]
+    commands = "my_python_package.commands"
+    ```
+  </TabItem>
+  <TabItem value="poetry">
+    ```toml
+    [tool.poetry.plugins."nodestream.plugins"]
+    commands = "my_python_package.commands"
+    ```
+  </TabItem>
+  <TabItem value="setup-cfg">
+    ```ini
+    [options.entry_points]
+    nodestream.plugins =
+        commands = my_python_package.commands
+    ```
+  </TabItem>
+  <TabItem value="setup-py">
+    ```python
+    from setuptools import setup
+
+    setup(
+        # ...,
+        entry_points = {
+            'nodestream.plugins': [
+                'commands = nodestream_plugin_cool.commands',
+            ]
+        }
+    )
+    ```
+  </TabItem>
+</Tabs>
+
+### Running a Command
+
+Once you have registered your command, you can run it using the `nodestream` command.
+
+```bash
+nodestream my-command
+```
+
+:::note
+
+You must run the command from an environment that has your package installed so that the entry point is registered.
+
+:::

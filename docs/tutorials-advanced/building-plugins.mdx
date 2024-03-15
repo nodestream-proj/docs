@@ -1,0 +1,299 @@
+---
+sidebar_position: 3
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+
+# Building a Plugin
+Ship a unit of functionality as a nodestream plugin.
+
+## Overview
+
+A plugin allows developers to integrate additional functionality into the nodestream platform.
+A plugin can be as simple as a simple filter or as complex as a fully-fledget set of pipelines and components.
+The plugin system is designed to be flexible and allow for a wide range of functionality to be added. Fundmentally, a plugin is simply a python package with particular entry points.
+
+You are going to want to build a plugin if:
+
+- You want to add and share functionality with the nodestream community
+- You want to add functionality to your own project but want to keep it separate from the main codebase
+- Distribute functionality to other developers in a way that is easy to integrate and use
+
+## Common Plugin Types
+
+Because the plugin system is so flexible, there are many different types of plugins that can be built.
+We can broadly categorize plugins into a few different types.
+A plugin can be more than one type at once or completely unique.
+
+### Project Plugins
+
+Project plugins are plugins that allow a developer to modify, extend, or in otherwise interact with the consumers project.
+Commonly this is to add new pipelines to a project that are logically very similar to one another.
+Our [Akamai](../official-plugins/akamai) plugin is a good example of this.
+It adds a set of pipelines that are all related to the Akamai platform.
+
+### Component Plugins
+
+Component plugins are plugins that add new components to the nodestream platform.
+This could be new filters, extractors, or other components that can be used in pipelines.
+This could also be a set of components that are logically related to one another.
+
+Our [Akamai](../official-plugins/akamai) plugin is also a good example of this.
+In order to interact with the Akamai platform, we need to be able to authenticate with its apis and make requests.
+Therfore the Akamai plugin adds a set of extractors that are all related to the Akamai platform.
+
+Another, more pure example, is our [Shell](../official-plugins/shell) plugin.
+This plugin adds a single component that allows you to run shell commands as part of a pipeline.
+
+### Utility Plugins
+
+Utility plugins are all about making the developers life easier.
+This could include things like adding audits or other utilities to the developer
+
+Our [Pedantic](../official-plugins/pedantic) and [DotEnv](../official-plugins/dotenv) plugins are good examples of this.
+The Pedantic plugin adds a set of audits that can be used to enforce a set of naming conventions while the DotEnv plugin allows you to interact source .env file at project runtime.
+
+### Database Plugins
+
+Database plugins are plugins that allow you to interact with a database.
+These are generally the most complex plugins as they require a lot of setup, configuration, and testing.
+They also require an understanding of the database that you are interacting with.
+
+Our [Neo4j](../databases/neo4j) and [Neptune](../databases/neptune) support are implementations of this type of plugin.
+
+## Plugin Structure
+
+A plugin is simply a python package with a particular structure.
+
+
+For the purposes of this guide, we'll walk you through starting a project in [poetry](https://python-poetry.org/).
+
+You can start by creating a new directory for your plugin and running `poetry new <plugin-name>`. For example,
+
+```bash
+poetry new nodestream-plugin-great-plugin
+```
+
+:::note
+
+While the `nodestream-plugin` prefix is not required, it is a good practice to use it to make it clear that this is a nodestream plugin.
+
+:::
+
+
+This will create a new directory with the following structure:
+
+```
+nodestream-plugin-great-plugin
+├── great_plugin
+│   └── __init__.py
+├── tests
+│   ├── __init__.py
+│   └── test_great_plugin.py
+├── pyproject.toml
+└── README.md
+```
+
+### pyproject.toml
+
+The `pyproject.toml` file is the configuration file for poetry.
+It contains all of the information about your project and its dependencies.
+You can add your dependencies here and poetry will manage them for you.
+By default, it will look something like this:
+
+```toml
+[tool.poetry]
+name = "nodestream-plugin-great-plugin"
+version = "0.1.0"
+description = "A great plugin for nodestream"
+authors = ["Your Name < [your email]>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+```
+
+The first thing you will want to do is add nodestream as a dependency.
+You can do this by running this command:
+
+```bash
+poetry add nodestream
+```
+
+This will add nodestream to your dependencies and install it for you.
+
+The other thing you will want to do is define the entry points for your plugin.
+This is how nodestream will know how to load your plugin.
+This varies depending on what extension points you are implementing.
+
+For many things, you will want to add an entry point to the `nodestream.plugins` group.
+For example, if you are adding a new audit, you will want to add an entry point like this:
+
+```toml
+[tool.poetry.plugins."nodestream.plugins"]
+audits = "nodestream_plugin_great_plugin.audits"
+```
+
+This tells nodestream that your plugin has a set of audits that it can load.
+In this case, it will look for a module called `audits` in the `nodestream_plugin_great_plugin` package.
+
+### `tests` directory
+
+The `tests` directory is where you will put your tests.
+You can use the `pytest` framework to write your tests.
+
+### `great_plugin` directory
+
+The `great_plugin` directory is where you will put your plugin code.
+This is where you will define your components, pipelines, and other functionality.
+
+## Implementing Plugin Behavior
+
+
+### Distributing Pipelines
+
+If you have a set of pipelines that you want to distribute with your plugin, you can do this by including them in your plugin package.
+
+For example, you can include the `yaml` files directly in your package and then load them in your plugin code.
+
+Consider the following directory structure:
+
+```
+nodestream-plugin-great-plugin
+├── great_plugin
+│   ├── __init__.py
+│   └── pipeline.yaml
+├── tests
+│   ├── __init__.py
+│   └── test_great_plugin.py
+├── pyproject.toml
+└── README.md
+```
+
+Note the `pipeline.yaml` file in the `great_plugin` directory.
+We can create a `ProjectPlugin` that loads this pipeline like this inside of a newly created `plugin.py` file inside of the `great_plugin` directory:
+
+```python
+# great_plugin/plugin.py
+
+from nodestream.project import Project, ProjectPlugin
+
+
+class GreatPlugin(ProjectPlugin):
+    def activate(self, project: Project) -> None:
+        project.add_plugin_scope_from_pipeline_resources(
+            name="great", package="great_plugin"
+        )
+```
+
+This will load the `pipeline.yaml` file and make it available to the project inside of the `great` scope.
+
+`ProjectPlugin` is a class that you can subclass to define your plugin.
+In addition to the activate method, project plugins can optionally implement the following lifecycle methods:
+
+`def before_project_load(self, file_path: Path) -> None`
+
+Called before a project is loaded. The file_path argument is the path to the project file.
+
+`def after_project_load(self, project: Project) -> None`
+
+Called after the project is loaded and all project plugins have been activated.
+
+#### Registering a Project Plugin
+
+Project plugins are registered via
+the [entry_points](https://setuptools.pypa.io/en/latest/userguide/entry_point.html#entry-points-for-plugins) API of a Python Package.
+Specifically, the `entry_point` named `project` inside of the `nodestream.plugins` group is loaded.
+All project plugins are expected to be a subclass of `nodestream.project:ProjectPlugin` as directed above.
+An instance of the class is created and the `activate` method is called with an instance of `nodestream.project:Project`.
+
+The `entry_point` should be a module that contains at least one `ProjectPlugin` class.
+At runtime, the module will be loaded and all classes that inherit from `nodestream.project:ProjectPlugin` will be registered.
+
+<Tabs
+  defaultValue="pyproject"
+  values={[
+    {label: 'pyproject.toml', value: 'pyproject'},
+    {label: 'poetry', value: 'poetry'},
+    {label: 'setup.cfg', value: 'setup-cfg'},
+    {label: 'setup.py', value: 'setup-py'},
+  ]}>
+  <TabItem value="pyproject">
+    ```toml
+    [project.entry-points."nodestream.plugins"]
+    projects = "my_python_package.plugin"
+    ```
+  </TabItem>
+  <TabItem value="poetry">
+    ```toml
+    [tool.poetry.plugins."nodestream.plugins"]
+    projects = "my_python_package.plugin"
+    ```
+  </TabItem>
+  <TabItem value="setup-cfg">
+    ```ini
+    [options.entry_points]
+    nodestream.plugins =
+        projects = my_python_package.plugin
+    ```
+  </TabItem>
+  <TabItem value="setup-py">
+    ```python
+    from setuptools import setup
+
+    setup(
+        # ...,
+        entry_points = {
+            'nodestream.plugins': [
+                'projects = nodestream_plugin_cool.plugin',
+            ]
+        }
+    )
+    ```
+  </TabItem>
+</Tabs>
+
+### Steps (Extractors, Transformers, Filters)
+
+If you have a set of steps that you want to distribute with your plugin, you can do this by including them in your plugin package.
+No other work is required to make these steps available to the project.
+Users can use them in their project by referencing them by module and class name.
+
+For example, if you have a `MyExtractor` class in a `my_extractor.py` file in the `great_plugin` package, you can use it in your project like this:
+
+```yaml
+implementation: great_plugin.my_extractor.MyExtractor
+```
+
+
+
+### Extra Functionality
+
+For the specifics of what entry points you need to define, you will need to refer to the documentation for the specific extension point you are implementing.
+These can be found in the [Extending the CLI](./extending-the-cli) and [Extending the DSL](./extending-the-dsl) sections of the documentation.
+
+## Packaging and Publishing
+
+Once you have your plugin written, you will want to package and distribute it.
+This will allow other developers to install and use your plugin.
+
+You can do this by running the following command:
+
+```bash
+poetry publish [--build]
+```
+
+This will publish your plugin to PyPi and make it available for other developers to install.
+If you pass the `--build` flag, it will also build your plugin before publishing it.
+If you don't pass the `--build` flag, you will need to build your plugin before publishing it by running the following command:
+
+```bash
+poetry build
+```

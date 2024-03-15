@@ -1,0 +1,8 @@
+{
+  "label": "Official Plugins",
+  "position": 8,
+  "link": {
+    "type": "generated-index",
+    "description": "Learn about the official plugins of the Nodestream Ecosystem"
+  }
+}

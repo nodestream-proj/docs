@@ -1,0 +1,443 @@
+---
+sidebar_position: 4
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Extending the DSL
+
+Extend the Nodestream DSL to create new ways to collect and process data.
+
+## Overview
+
+The Nodestream DSL is a powerful way to define how data is collected and modeled as a graph.
+You can extend the DSL to create new ways to collect and process data.
+You can either include these customizations an a [plugin](./building-plugins) or as a part of your own codebase.
+
+## Supporting New File Types
+
+As documented in the [File Extractor Family](../reference/extractors#the-file-extractor-family) section, nodestream supports a variety of file types.
+You can add support for new file types by creating a [new extractor](./new-steps#creating-an-extractor) or by extending the existing extractors by introducing a supported file type.
+It is best to prefer the latter approach but if you need to create a new extractor, you can read the [Creating a New Extractor](./new-steps#creating-an-extractor) section.
+This section will guide you through the process of creating a new file type support.
+
+### Implementing a New File Type
+
+To start, you need to create a new file type handler class.
+To do so, subclaas from the `SupportedFileFormat` class and stub the `read_file_from_handle` method.
+
+```python
+from nodestream.extractors.files import SupportedFileFormat
+
+class TabbedSeperatedValues(SupportedFileFormat, alias=".tsv"):
+    def read_file_from_handle(self, fp) -> Iterable[dict]:
+        ...
+```
+
+The `read_file_from_handle` method should return an iterable of dictionaries, where each dictionary represents a row in the file.
+The keys of the dictionary should be the column names and the values should be the values in the row.
+By default, the `fp` variable is a read handle to the file in `bytes` mode.
+Often times, you will want to read the file in text mode, so you can use the `io.TextIOWrapper` class to wrap the file handle in text mode.
+
+```python
+from io import TextIOWrapper
+from nodestream.extractors.files import SupportedFileFormat
+
+class TabbedSeperatedValues(SupportedFileFormat, alias=".tsv"):
+    reader = TextIOWrapper
+
+    def read_file_from_handle(self, text_fp) -> Iterable[dict]:
+            for line in text_fp:
+                ...
+```
+
+In this case, the `reader` attribute is set to `TextIOWrapper` to indicate that the file should be wrapped in a `TextIOWrapper` object.
+The `read_file_from_handle` method is now expecting a text file handle and can read the file line by line.
+Thus, we can now use the `csv` module to parse the file.
+
+```python
+from csv import DictReader
+from io import TextIOWrapper
+
+from nodestream.extractors.files import SupportedFileFormat
+
+
+class TabbedSeperatedValues(SupportedFileFormat, alias=".tsv"):
+    reader = TextIOWrapper
+
+    def read_file_from_handle(self, text_fp) -> Iterable[dict]:
+        for row in DictReader(text_fp, delimiter="\t"):
+            yield row
+```
+
+### Registering the New File Type
+
+File types are registered via the [entry_points](https://setuptools.pypa.io/en/latest/userguide/entry_point.html#entry-points-for-plugins) API of a Python Package.
+Specifically, the `entry_point` named `files` inside of the `nodestream.plugins` group is loaded.
+The entry point provided should be a module which has atleast one subclass of `nodestream.extractors.files:SupportedFileFormat` as directed above.
+Each subclass will be registered as an `SupportedFileFormat`.
+
+Depending on how you are building your package, you can register your audit plugin in one of the following ways:
+
+<Tabs
+  defaultValue="pyproject"
+  values={[
+    {label: 'pyproject.toml', value: 'pyproject'},
+    {label: 'poetry', value: 'poetry'},
+    {label: 'setup.cfg', value: 'setup-cfg'},
+    {label: 'setup.py', value: 'setup-py'},
+  ]}>
+  <TabItem value="pyproject">
+    ```toml
+    [project.entry-points."nodestream.plugins"]
+    files = "my_python_package.files"
+    ```
+  </TabItem>
+  <TabItem value="poetry">
+    ```toml
+    [tool.poetry.plugins."nodestream.plugins"]
+    files = "my_python_package.files"
+    ```
+  </TabItem>
+  <TabItem value="setup-cfg">
+    ```ini
+    [options.entry_points]
+    nodestream.plugins =
+        files = my_python_package.files
+    ```
+  </TabItem>
+  <TabItem value="setup-py">
+    ```python
+    from setuptools import setup
+
+    setup(
+        # ...,
+        entry_points = {
+            'nodestream.plugins': [
+                'files = nodestream_plugin_cool.files',
+            ]
+        }
+    )
+    ```
+  </TabItem>
+</Tabs>
+
+### Using the New File Type
+
+Once the new file type is registered, it can be used in the DSL as a file extractor.
+The file extractors will automatically be aware of and use the new file type.
+
+```yaml
+- implementation: nodestream.pipeline.extractors:FileExtractor
+  arguments:
+    globs:
+      - data/*.tsv
+```
+
+## Creating an Interpretation
+
+The [Interpreations](../reference/interpreting#interpretations) that are built into nodestream are powerful tools for mapping the data into a graph.
+However, you may need to create a new interpretation to handle a specific use case.
+This section will guide you through the process of creating a new interpretation.
+Before venturing down this path, it is recommended to read the [Interpreting References](../reference/interpreting) as well as the [Source Node](../tutorials-intermediate/source-nodes) and [Relationship Building](../tutorials-intermediate/relationship-building-techniques) tutorials thoroughly to understand the concepts, best practices, and the existing interpretations.
+
+### Implementing a New Interpretation
+
+To start, you need to create a new interpretation class.
+To do so, subclass from the `Interpretation` class and stub the `interpret` method.
+
+```python
+from nodestream.interpreting import Interpretation
+from nodestream.pipeline.value_providers import ProviderContext
+
+
+class MyInterpretation(Interpretation):
+     def interpret(self, context: ProviderContext):
+        ...
+```
+
+The `interpret` method should use the `context` object to create nodes and relationships in the graph.
+The `context` object has methods for creating nodes and relationships, as well as methods for querying the graph and the underlying data being interpreted.
+
+For example, let's say we want to store the positive and negative values of a boolean property in the graph.
+
+For example, if we want to have a `live` and `archived` node `Posts`, we can create a new interpretation to handle this.
+
+```python
+from nodestream.interpreting import Interpretation
+from nodestream.pipeline.value_providers import ProviderContext, StaticValueOrValueProvider, ValueProvider
+
+
+class PositiveNegativeProperty(Interpretation, alias="pos_negative"):
+    def __init__(self, positive_property_name: str, negative_property_name: str, value: StaticValueOrValueProvider):
+        self.positive_property_name = positive_property_name
+        self.negative_property_name = negative_property_name
+        self.value = ValueProvider.guarantee_value_provider(value)
+
+    def interpret(self, context: ProviderContext):
+        source_node = context.desired_ingest.source
+        value = self.value.single_value(context)
+        source_node.properties.set(self.positive_property_name, value)
+        source_node.properties.set(self.negative_property_name, not value)
+```
+
+There is a lot there, so lets break it down.
+First, we have the `__init__` method which takes in the `positive_property_name`, `negative_property_name`, and `value` arguments.
+These values are directly passed from the Yaml location.
+The `value` argument is wrapped in a `ValueProvider` to ensure that it is a `ValueProvider` object and not a static value.
+
+The `interpret` method is where the magic happens.
+The `context` object is used to get the source node and set the properties on the node.
+Then `value` is retrieved from the `value` argument and set on the source node as the `positive_property_name`.
+Then `not value` is set on the source node as the `negative_property_name`.
+
+### Registering the New Interpretation
+
+
+Interpretations are registered via the [entry_points](https://setuptools.pypa.io/en/latest/userguide/entry_point.html#entry-points-for-plugins) API of a Python Package.
+Specifically, the `entry_point` named `interpretations` inside of the `nodestream.plugins` group is loaded.
+The entry point provided should be a module which has atleast one subclass of `nodestream.interpreting:Interpretation` as directed above.
+Each subclass will be registered as an `Interpretation`.
+
+Depending on how you are building your package, you can register your audit plugin in one of the following ways:
+
+<Tabs
+  defaultValue="pyproject"
+  values={[
+    {label: 'pyproject.toml', value: 'pyproject'},
+    {label: 'poetry', value: 'poetry'},
+    {label: 'setup.cfg', value: 'setup-cfg'},
+    {label: 'setup.py', value: 'setup-py'},
+  ]}>
+  <TabItem value="pyproject">
+    ```toml
+    [project.entry-points."nodestream.plugins"]
+    interpretations = "my_python_package.interpretations"
+    ```
+  </TabItem>
+  <TabItem value="poetry">
+    ```toml
+    [tool.poetry.plugins."nodestream.plugins"]
+    interpretations = "my_python_package.interpretations"
+    ```
+  </TabItem>
+  <TabItem value="setup-cfg">
+    ```ini
+    [options.entry_points]
+    nodestream.plugins =
+        interpretations = my_python_package.interpretations
+    ```
+  </TabItem>
+  <TabItem value="setup-py">
+    ```python
+    from setuptools import setup
+
+    setup(
+        # ...,
+        entry_points = {
+            'nodestream.plugins': [
+                'interpretations = nodestream_plugin_cool.interpretations',
+            ]
+        }
+    )
+    ```
+  </TabItem>
+</Tabs>
+
+### Using an Interpretation
+
+Once the new interpretation is registered, it can be used in the DSL as an interpretation.
+The interpretations will automatically be aware of and use the new interpretation.
+
+```yaml
+-  type: pos_negative
+   positive_property_name: live
+   negative_property_name: archived
+   value: true
+```
+
+
+## Creating a Value Provider
+
+### Implementing a New Value Provider
+
+### Registering the New Value Provider
+
+### Using a Value Provider
+
+
+## Creating a Normalizer
+
+A `Normalizer` allows you to clean data extracted by a `ValueProvider`. They are intended to provided stateless, simple
+transformations of data. Nodestream has some built in ones that you can view [here](../reference/interpreting#normalizers).
+
+For example, assume that you have numeric numbers that should be rounded to a whole number before being used.
+Let's build a normalizer that does this for us.
+
+### Implementing a New Normalizer
+
+To start, you need to create a new normalizer class.
+To do so, subclass from the `Normalizer` class and stub the `normalize` method.
+
+
+```python
+from typing import Any
+
+from nodestream.pipeline.normalizers import Normalizer
+
+class RoundToWholeNumber(Normalizer, alias="round_numbers"):
+    def normalize_value(self, value: Any) -> Any:
+        return int(value) if isinstance(value, float) else value
+```
+
+In this example, we take a value and round it to a whole number if it is a float.
+If it is not a float, we return the value as is.
+
+### Registering the New Normalizer
+
+Normalizers are registered via the [entry_points](https://setuptools.pypa.io/en/latest/userguide/entry_point.html#entry-points-for-plugins) API of a Python Package. Specifically, the `entry_point` named `normalizers` inside of the `nodestream.plugins` group is loaded. Every Value Provider is expected to be a subclass of `nodestream.pipeline.normalizers:Normalizer` as directed above.
+
+The `entry_point` should be a module that contains at least one `Normalizer` class. At runtime, the module will be loaded and all classes that inherit from `nodestream.pipeline.normalizers:Normalizer` will be registered.
+
+<Tabs
+  defaultValue="pyproject"
+  values={[
+    {label: 'pyproject.toml', value: 'pyproject'},
+    {label: 'poetry', value: 'poetry'},
+    {label: 'setup.cfg', value: 'setup-cfg'},
+    {label: 'setup.py', value: 'setup-py'},
+  ]}>
+  <TabItem value="pyproject">
+    ```toml
+    [project.entry-points."nodestream.plugins"]
+    normalizers = "my_python_package.normalizers"
+    ```
+  </TabItem>
+  <TabItem value="poetry">
+    ```toml
+    [tool.poetry.plugins."nodestream.plugins"]
+    normalizers = "my_python_package.normalizers"
+    ```
+  </TabItem>
+  <TabItem value="setup-cfg">
+    ```ini
+    [options.entry_points]
+    nodestream.plugins =
+        normalizers = my_python_package.normalizers
+    ```
+  </TabItem>
+  <TabItem value="setup-py">
+    ```python
+    from setuptools import setup
+
+    setup(
+        # ...,
+        entry_points = {
+            'nodestream.plugins': [
+                'normalizers = nodestream_plugin_cool.normalizers',
+            ]
+        }
+    )
+    ```
+  </TabItem>
+</Tabs>
+
+### Using a Normalizer
+
+You can now use your normalizer in sections that handle normalization flags. For more information,
+see the [Interpretation's reference](../reference/interpreting). For example, if you are using this
+in a source node interpretation, you could use it as follows:
+
+```yaml
+interpretations:
+  - type: source_node
+    node_type: Metric
+    key:
+      value: !jmespath value
+    normalization:
+      do_round_numbers: true
+```
+
+## Creating an Argument Resolver
+
+A ArgumentResolver allows you to inline a value into the Pipeline or project file before the pipeline is initialized.
+For more information, see the [Configuring Projects and Pipelines](../tutorials-intermediate/configuring-projects).
+This can be useful for passing configuration from files, environment, secret stores, and the like.
+
+### Implementing a New Argument Resolver
+
+Definfing a new argument resolver is simple. You need to subclass from the `ArgumentResolver` class and implement the `resolve_arugment` method.
+For example, let's create an argument resolver that retrieves a secret from [amazon's secret manager](https://aws.amazon.com/secrets-manager/).
+
+```python
+import boto3
+
+from nodestream.pipeline.argument_resolvers import ArgumentResolver
+
+
+class SecretResolver(ArgumentResolver, alias="secret"):
+    @staticmethod
+    def resolve_argument(variable_name):
+        client = boto3.client("secretsmanager")
+        return client.get_secret_value(SecretId=variable_name)["SecretString"]
+```
+
+### Registering the New Argument Resolver
+
+ArgumentResolvers are registered via the [entry_points](https://setuptools.pypa.io/en/latest/userguide/entry_point.html#entry-points-for-plugins) API of a Python Package. Specifically, the `entry_point` named `argument_resolvers` inside of the `nodestream.plugins` group is loaded. It is expected to be a subclass of `nodestream.pipeline.argument_resolvers:ArgumentResolver` as directed above.
+
+The `entry_point` should be a module that contains at least one argument resolver class. At runtime, the module will be loaded and all classes that inherit from `nodestream.pipeline.argument_resolvers:ArgumentResolver` will be registered.
+
+<Tabs
+  defaultValue="pyproject"
+  values={[
+    {label: 'pyproject.toml', value: 'pyproject'},
+    {label: 'poetry', value: 'poetry'},
+    {label: 'setup.cfg', value: 'setup-cfg'},
+    {label: 'setup.py', value: 'setup-py'},
+  ]}>
+  <TabItem value="pyproject">
+    ```toml
+    [project.entry-points."nodestream.plugins"]
+    argument_resolvers = "my_python_package.argument_resolvers"
+    ```
+  </TabItem>
+  <TabItem value="poetry">
+    ```toml
+    [tool.poetry.plugins."nodestream.plugins"]
+    argument_resolvers = "my_python_package.argument_resolvers"
+    ```
+  </TabItem>
+  <TabItem value="setup-cfg">
+    ```ini
+    [options.entry_points]
+    nodestream.plugins =
+        argument_resolvers = my_python_package.argument_resolvers
+    ```
+  </TabItem>
+  <TabItem value="setup-py">
+    ```python
+    from setuptools import setup
+
+    setup(
+        # ...,
+        entry_points = {
+            'nodestream.plugins': [
+                'argument_resolvers = nodestream_plugin_cool.argument_resolvers',
+            ]
+        }
+    )
+    ```
+  </TabItem>
+</Tabs>
+
+
+### Using an Argument Resolver
+
+You can now use your argument resolver in sections that handle argument resolution. For more information, see the [Configuring Projects and Pipelines](../tutorials-intermediate/configuring-projects). For example, if you are using this in a pipeline file, you could use it as follows:
+
+```yaml
+arguments:
+  - name: !secret my_secret_key_in_secrets_manager
+```
