@@ -5,7 +5,7 @@ import styles from './styles.module.css';
 const FeatureList = [
   {
     title: 'Build Fast',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
+    Svg: require('@site/static/img/undraw_nodestream_code.svg').default,
     description: (
       <>
         Not familiar with Cypher or Gremlin? No problem! Nodestream provides a
@@ -15,7 +15,7 @@ const FeatureList = [
   },
   {
     title: 'Stay Flexible',
-    Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
+    Svg: require('@site/static/img/undraw_nodestream_servers.svg').default,
     description: (
       <>
         Nodestream is built to support multiple graph databases, including
@@ -26,7 +26,7 @@ const FeatureList = [
   },
   {
     title: 'Extract Insights',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
+    Svg: require('@site/static/img/undraw_nodestream_data_processing.svg').default,
     description: (
       <>
         Nodestream provides tooling to convert build reproducible pipelines 

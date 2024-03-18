@@ -7,9 +7,9 @@ const config = {
   favicon: 'img/favicon.ico',
 
   url: 'https://nodestream-proj.github.io',
-  baseUrl: '/',
+  baseUrl: '/docs',
   organizationName: 'nodestream-proj',
-  projectName: 'nodestream',
+  projectName: 'docs',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   trailingSlash: true,
@@ -87,7 +87,7 @@ const config = {
             items: [
               {
                 label: 'Tutorial',
-                to: '/docs/intro',
+                to: '/docs/docs/intro',
               },
             ],
           },

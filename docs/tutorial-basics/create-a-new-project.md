@@ -10,7 +10,7 @@ Welcome to Nodestream! In this tutorial, we'll walk you through creating a new N
 
 ## Installation
 
-Before you get started, you'll need to install Nodestream. Follow the instructions in the [Installation](/docs/intro#installation) section.
+Before you get started, you'll need to install Nodestream. Follow the instructions in the [Installation](/docs/docs/intro#installation) section.
 
 ## Create A New Project
 
