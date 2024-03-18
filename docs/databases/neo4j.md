@@ -19,7 +19,7 @@ To use Neo4j with Nodestream, you'll need to have a Neo4j database running and a
 Additionally, you'll need to have the [APOC library](https://neo4j.com/labs/apoc/) installed in your Neo4j database.
 Internally, Nodestream uses the APOC library to perform various operations on the database, such as batch importing data.
 
-## Compatability Matrix
+## Compatibility Matrix
 
 Nodestream has been tested with the following versions of Neo4j:
 
