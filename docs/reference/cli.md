@@ -280,3 +280,27 @@ Options:
 
 
 ### `migrations show`
+
+The `migrations show` command will show the migrations for the current project.
+
+```bash
+nodestream migrations show [flags]
+```
+
+All possible options are:
+
+```plaintext
+Usage:
+  migrations show [options]
+
+Options:
+  -p, --project=PROJECT  The project file (nodestream.yaml) to load.
+  -t, --target=TARGET    Specify a database to target at run time. (multiple values allowed)
+  -h, --help             Display help for the given command. When no command is given display help for the list command.
+  -q, --quiet            Do not output any message.
+  -V, --version          Display this application version.
+      --ansi             Force ANSI output.
+      --no-ansi          Disable ANSI output.
+  -n, --no-interaction   Do not ask any interactive question.
+  -v|vv|vvv, --verbose   Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug.
+```
