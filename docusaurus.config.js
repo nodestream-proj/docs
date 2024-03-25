@@ -57,12 +57,11 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      image: 'img/docusaurus-social-card.jpg',
       navbar: {
         title: 'Nodestream',
         logo: {
-          alt: 'My Site Logo',
-          src: 'img/logo.svg',
+          alt: 'Nodestream Logo',
+          src: 'img/nodestream.png',
         },
         items: [
           {
