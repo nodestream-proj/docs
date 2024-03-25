@@ -2,6 +2,9 @@
 
 This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
 
+
+View the website at [https://nodestream-proj.github.io/docs/](https://nodestream-proj.github.io/docs/).
+
 ### Installation
 
 ```
