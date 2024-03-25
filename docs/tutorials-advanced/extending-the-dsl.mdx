@@ -260,12 +260,141 @@ The interpretations will automatically be aware of and use the new interpretatio
 
 ## Creating a Value Provider
 
+There are many methods of extracting and providing data to the ETl pipeline as it operates. 
+The various yaml tags such as `!jmespath` or `!variable` refer to an underlying ValueProvider.
+You can create your own ValueProvider to provide data to the pipeline.
+
 ### Implementing a New Value Provider
+
+To start, you need to create a new value provider class.
+To do so, subclass from the `ValueProvider` class and stub the `single_value` and `many_values` methods.
+
+```python
+from nodestream.pipeline.value_providers import ValueProvider, ProviderContext
+
+class HashValueProvider(ValueProvider):
+    def single_value(self, context: ProviderContext) -> Any:
+        ...
+
+    def many_values(self, context: ProviderContext) -> Iterable[Any]:
+        ...
+```
+
+In this case, we're going to hash values coming from a wrapped value provider.
+
+```python
+from hashlib import sha256
+
+from nodestream.pipeline.value_providers import ValueProvider, ProviderContext
+
+class HashValueProvider(ValueProvider):
+    def __init__(self, wrapped: ValueProvider):
+        self.wrapped = wrapped
+
+    def hash(self, value: Any) -> str:
+        return sha256(str(value).encode()).hexdigest()
+
+    def single_value(self, context: ProviderContext) -> Any:
+        return self.hash(self.wrapped.single_value(context))
+
+    def many_values(self, context: ProviderContext) -> Iterable[Any]:
+        for value in self.wrapped.many_values(context):
+            yield self.hash(value)
+```
+
+In this example, we take a value from the wrapped value provider and hash it using sha256.
+Now we need to wire it into the DSL. 
+`nodestream` uses `pyyaml` to parse the yaml files, so we need to add a constructor to the `HashValueProvider` class.
+
+```python
+class HashValueProvider(ValueProvider):
+    # ... 
+
+    @classmethod
+    def install_yaml_tag(cls, loader: Type[SafeLoader]):
+        loader.add_constructor(
+            "!hash", lambda loader, node: cls(value_provider_to_hash=loader.construct_mapping(node)["hash_value"])
+        )
+```
+
+This will allow us to use the `!hash` tag in the yaml file to create a new `HashValueProvider`.
+In this case, we are expecting a mapping with a `hash_value` key that will be passed to the `HashValueProvider` constructor.
+That would look like this in the yaml file:
+
+```yaml
+- type: source_node
+  node_type: Metric
+  key:
+    value: !hash
+      hash_value: !jmespath value
+```
 
 ### Registering the New Value Provider
 
+In order to register the new ValueProvider, you need to add an entry point to your package.
+
+Value Providers are registered via the [entry_points](https://setuptools.pypa.io/en/latest/userguide/entry_point.html#entry-points-for-plugins) API of a Python Package. 
+Specifically, the `entry_point` named `value_providers` inside of the `nodestream.plugins` group is loaded. 
+Every Value Provider is expected to be a subclass of `nodestream.pipeline.value_providers:ValueProvider` as directed above.
+
+The `entry_point` should be a module that contains at least one `ValueProvider` class. 
+At runtime, the module will be loaded and all classes that inherit from `nodestream.pipeline.value_providers:ValueProvider` will be registered.
+
+<Tabs
+  defaultValue="pyproject"
+  values={[
+    {label: 'pyproject.toml', value: 'pyproject'},
+    {label: 'poetry', value: 'poetry'},
+    {label: 'setup.cfg', value: 'setup-cfg'},
+    {label: 'setup.py', value: 'setup-py'},
+  ]}>
+  <TabItem value="pyproject">
+    ```toml
+    [project.entry-points."nodestream.plugins"]
+    normalizers = "my_python_package.normalizers"
+    ```
+  </TabItem>
+  <TabItem value="poetry">
+    ```toml
+    [tool.poetry.plugins."nodestream.plugins"]
+    normalizers = "my_python_package.normalizers"
+    ```
+  </TabItem>
+  <TabItem value="setup-cfg">
+    ```ini
+    [options.entry_points]
+    nodestream.plugins =
+        normalizers = my_python_package.normalizers
+    ```
+  </TabItem>
+  <TabItem value="setup-py">
+    ```python
+    from setuptools import setup
+
+    setup(
+        # ...,
+        entry_points = {
+            'nodestream.plugins': [
+                'normalizers = nodestream_plugin_cool.normalizers',
+            ]
+        }
+    )
+    ```
+  </TabItem>
+</Tabs>
+
+
 ### Using a Value Provider
 
+As mentioned above, you can now use your value provider in the DSL.
+
+```yaml
+- type: source_node
+  node_type: Metric
+  key:
+    value: !hash
+      hash_value: !jmespath value
+```
 
 ## Creating a Normalizer
 
