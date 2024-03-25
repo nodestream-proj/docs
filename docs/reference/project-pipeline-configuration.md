@@ -66,9 +66,9 @@ scopes:
 The `Target` is a configuration object that defines how to connect to a database. 
 It is defined in the following schema:
 
-| Key        | Description                                                                                                                                                        | Type     | Default | Required |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- | ------- | -------- |
-| `database` | The type of the target. This is used to determine which backend to use to communicate to the database.                                                             | `String` | N/A     | Yes      |
+| Key        | Description                                                                                                                                                                           | Type     | Default | Required |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------- | -------- |
+| `database` | The type of the target. This is used to determine which backend to use to communicate to the database.                                                                                | `String` | N/A     | Yes      |
 | `**config` | Additional key, values on the object are directly passed to the backend. See the [database documentation](../../category/database-support/) for more information on how to configure. | `Map`    | `{}`    | No       |
 
 ### Plugin
@@ -85,6 +85,27 @@ It is defined in the following schema:
 | `pipelines`   | A list of [Pipeline](#pipeline) instances used to configure pipelines provided by the plugin.                                                                                          | `List[Pipeline]`      | `[]`    | No       |
 
 ## Pipeline Configuration
+
+The pipeline configuration file is used to define the pipeline's steps and settings.
+The file is defined in the following schema:
+
+### `pipeline.yaml`
+
+The pipeline configuration file is a list of steps that are executed in order. See the [step definition](#stepdefinition) for more information on how to define a step.
+
+
+### Step Definition
+
+A step is a configuration object that defines a single unit of work in the pipeline.
+It is defined in the following schema:
+
+| Key              | Description                                                                                                                                                                                                             | Type             | Default          | Required |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | ---------------- | -------- |
+| `implementation` | The python path to the step implementation. The path is defined as `module.path:object`.                                                                                                                                | `String`         | N/A              | Yes      |
+| `arguments`      | The arguments to be passed to the step implementation. Arguments are passed to the `factor` method as key word arguments on the supplied class. By default this method passes those arguments to class's constructor.   | `Dict[str, Any]` | `{}`             | No       |
+| `annotations`    | A list of strings that can be used to annotate the step. If annotations are passed from `nodestream run`, then the only steps that are loaded are ones that are not annotated or have at least one matching annotation. | `List[String]`   | `[]`             | No       |
+| `factory`        | The name of the `@classmethod` on the step class that is used to create the step. This is useful for steps that need to be created in different ways.  If set, `arguments`                                              | `String`         | `from_file_data` | No       |
+
 
 ## Argument Resolution
 

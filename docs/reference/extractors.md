@@ -145,3 +145,9 @@ Each object in the `configurations` list should include the following arguments:
 | `enabled`         | Whether or not the TTL is enabled. Defaults to True.                                                                                               | `bool` | No       | `True`        |
 | `batch_size`      | The number of objects to delete in a single batch. Defaults to 100.                                                                                | `int`  | No       | `100`         |
 | `custom_query`    | A custom query to use to delete the objects. If not provided, the default query will be used. The custom query is database implmentation specific. | `str`  | No       | N/A           |
+
+
+
+## Reminder
+
+Remember that you can always build your own extractors by implementing the `Extractor` interface. See [here](../../tutorials-advanced/new-steps) for more information.
