@@ -119,13 +119,13 @@ const config = {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
       },
-      announcementBar: {
-        id: 'in_progress',
-        content: "This documentation is a work in progress and not meant for public consumption.",
-        backgroundColor: '#20232a',
-        textColor: '#fff',
-        isCloseable: false,
-      },
+      // announcementBar: {
+      //   id: 'in_progress',
+      //   content: "This documentation is a work in progress and not meant for public consumption.",
+      //   backgroundColor: '#20232a',
+      //   textColor: '#fff',
+      //   isCloseable: false,
+      // },
     }),
 };
 
