@@ -70,7 +70,6 @@ We are happy to announce that nodestream now supports parquet as a first class c
 **Check out the docs on it [here](/docs/docs/reference/extractors/#the-file-extractor-family)**.
 
 Core Contributors to this feature include:
-Core Contributors to this feature include:
 - [Zach Probst](https://github.com/zprobst)
 - [Dave Bechberger](https://github.com/bechbd)
 - [Cole Greer](https://github.com/Cole-Greer)
