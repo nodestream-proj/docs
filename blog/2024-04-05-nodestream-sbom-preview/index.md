@@ -36,7 +36,7 @@ Neptune Notebooks is a managed open-source graph-notebook project provides a ple
 
 Now that we have setup our database and analysis environment we next need to install the Nodestream plugins for Neptune and SBOM.
 
-`pip install -q pyyaml nodestream-plugin-neptune nodestream_plugin_sbom`
+`pip install -q pyyaml nodestream-plugin-neptune nodestream-plugin-sbom`
 
 With those data files installed, all we need to do is set our configuration in the `nodestream.yaml` file as shown below. In this example, we are going to load the SBOM files for Nodestream, the Nodestream Neptune Plugin, and the Nodestream SBOM plugin into our database, directly from GitHub.
 
@@ -131,8 +131,8 @@ Another common use case is to investigate licensing across multiple projects. Th
 ```
 MATCH p=(l:License)<-[:LICENSED_BY]-(:Component)<-[:DEPENDS_ON]-(:Document)
 -[:DEPENDS_ON]->(:Component)-[:LICENSED_BY]->(l2)
-WHERE [l.name](http://l.name/) = 'lgpl-2.1-or-later' and l<>l2
-RETURN DISTINCT [l2.name](http://l2.name/)
+WHERE l.name = 'lgpl-2.1-or-later' and l<>l2
+RETURN DISTINCT l2.name
 ```
 
 ![Results](analyze_query_3.png "Results")
@@ -142,8 +142,8 @@ As we see, there are quite a few other licenses used in these projects. We can l
 ```
 MATCH p=(l:License)←[:LICENSED_BY]-(:Component)←[:DEPENDS_ON]-(:Document)
 -[:DEPENDS_ON]→(:Component)-[:LICENSED_BY]→(l2)
-WHERE [l.name](http://l.name/) = 'lgpl-2.1-or-later' and l<>l2
-RETURN DISTINCT [l2.name](http://l2.name/)
+WHERE l.name = 'lgpl-2.1-or-later' and l<>l2
+RETURN DISTINCT l2.name
 ```
 
 ![Results](analyze_query_4.png "Results")
