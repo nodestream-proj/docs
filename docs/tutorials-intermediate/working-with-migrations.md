@@ -55,6 +55,8 @@ Nodestream currently supports the following types of changes:
 
 Depending on the underlying graph database, some of these changes may not be supported or do nothing. See the documentation for your specific graph database for more information [here](../../category/database-support).
 
+:::
+
 ## Running Migrations
 
 To run the migrations, use the `nodestream migrations run` command.
