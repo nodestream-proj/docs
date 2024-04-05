@@ -139,7 +139,7 @@ We've observed a 10% improvement in processing times and a 5% reduction in memor
 <p><img decoding="async" loading="lazy" alt="SBOM Model Overview" src="https://nodestream-proj.github.io/docs/assets/images/sbom_overview-11f78470eba485ca6b53f6be5c6c0cc6.png" title="SBOM Data Overview" width="1422" height="1324" class="img_ev3q"></p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="what-does-our-graph-look-like">What does our graph look like?<a href="https://nodestream-proj.github.io/docs/blog/2024/04/05/nodestream-sbom-preview#what-does-our-graph-look-like" class="hash-link" aria-label="Direct link to What does our graph look like?" title="Direct link to What does our graph look like?">​</a></h3>
 <p>Let’s take a look at the types of data that we are storing in our graph. The plugin uses the opinionated graph data model shown below to represent SBOM data files.
-<img decoding="async" loading="lazy" alt="SBOM Graph schema" src="https://nodestream-proj.github.io/docs/assets/images/schema-da6d82444eb0b25cc20352e7eef6c28b.png" title="SBOM Graph Schema" width="581" height="481" class="img_ev3q">
+<img decoding="async" loading="lazy" alt="SBOM Graph schema" src="https://nodestream-proj.github.io/docs/assets/images/schema-060f6f9a4f1036b5c1af339fd68d47fe.png" title="SBOM Graph Schema" width="581" height="481" class="img_ev3q">
 This model contains the following elements:</p>
 <p><strong>Node Types</strong></p>
 <ul>
