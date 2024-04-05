@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkdocs=self.webpackChunkdocs||[]).push([[5512],{4352:e=>{e.exports=JSON.parse('{"title":"Recent posts","items":[{"title":"Nodestream 0.12 Release","permalink":"/docs/blog/2024/04/03/nodestream-0-12","unlisted":false},{"title":"Welcome","permalink":"/docs/blog/welcome","unlisted":false}]}')}}]);
