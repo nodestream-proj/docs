@@ -58,6 +58,7 @@ TO accomedate that, we have moved the neo4j database connector into a separate p
 <p>Core Contributors to this feature include:</p>
 <ul>
 <li><a href="https://github.com/zprobst" target="_blank" rel="noopener noreferrer">Zach Probst</a></li>
+<li><a href="https://github.com/aryex" target="_blank" rel="noopener noreferrer">Alex Le</a></li>
 <li><a href="https://github.com/Cole-Greer" target="_blank" rel="noopener noreferrer">Cole Greer</a></li>
 <li><a href="https://github.com/bechbd" target="_blank" rel="noopener noreferrer">Dave Bechberger</a></li>
 <li><a href="https://github.com/alexey-temnikov" target="_blank" rel="noopener noreferrer">Alexey Temnikov</a></li>
