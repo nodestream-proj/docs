@@ -23,8 +23,8 @@ sequenceDiagram
     Note over C: DesiredIngestion Created
     C->>I: context
     I->>Int: interpret(context)
-    I->>D: add_source_node()
-    I->>D: add_relationship()
+    Int->>D: add_source_node()
+    Int->>D: add_relationship()
     I->>P: desired_ingestion
     P->>W: write_record(desired_ingestion)
     W->>D: ingest(IngestionStrategy)
