@@ -23,13 +23,14 @@ Interpretations are the building blocks of the `Interpreter`. They are used to i
 The `SourceNodeInterpretation` is used to interpret the data into a source node.
 
 | Parameter Name     | Required? | Type                    | Description                                                                                                                                                                                                                                                                                                            |
-| ------------------ | --------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|--------------------|-----------|-------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | node_type          | Yes       | String or ValueProvider | Specifies the type of the source node. It is a required field. When a  ValueProvider is used dynamic index creation and schema introspection are not supported.                                                                                                                                                        |
 | key                | Yes       | Dictionary              | Contains key-value pairs that define the key of the source node.  The keys represent field names, and the values can be either static values or value providers.  It is a required field.                                                                                                                              |
+| allow_create       | No        | Boolean                 | When `true`, allows creating new nodes when source node is not in the graph. When `false`, new source nodes will not be added to the graph. This field is optional and the default value is `true`.                                                                                                                    |
 | properties         | No        | Dictionary              | Stores additional properties of the source node. It is a dictionary  where the keys represent property names, and the values can be either  static values or value providers. This field is optional.                                                                                                                  |
 | additional_indexes | No        | List[String]            | Specifies additional indexes for desired on the source node. It is a list of field names. This field is optional.                                                                                                                                                                                                      |
 | additional_types   | No        | List[String]            | Defines additional types for the source node. It is a list of strings representing the additional types.  These types are not considered by ingestion system as part of the identity of the node and rather considered as  extra labels applied after the ingestion of the node is completed.  This field is optional. |
-| normalization      | No        | Dictionary              | Contains normalization flags that should be adopted by value providers when getting values. This field is optional. [See the normalization reference](#normalizers).  By default `do_lowercase_strings` is enabled.                                                                                                |
+| normalization      | No        | Dictionary              | Contains normalization flags that should be adopted by value providers when getting values. This field is optional. [See the normalization reference](#normalizers).  By default `do_lowercase_strings` is enabled.                                                                                                    |       
 
 #### Example
 
@@ -76,6 +77,8 @@ The `SourceNodeInterpretation` is used to interpret the data into a source node.
   node_key:
     name: !jmespath name
 ```
+
+See Also: [Source Node and Relationship Interpretation Combined](#source-node-and-relationship-interpretation-combined)
 
 ### Properties Interpretation
 
@@ -131,6 +134,111 @@ The `SwitchInterpretation` is used to switch between different interpretations b
 | interpretations  	| Yes        	| Dictionary 	| Contains the interpretations that will be applied. The keys represent the values of the `switch_on` parameter. The values represent the interpretations that will be applied. Each value may also be a list of interpretations.	|
 | default  	| No        	| Dictionary 	| Contains the default interpretation that will be applied if no interpretation has the same value as the value of the `switch_on` parameter. 	|
 
+### Source Node and Relationship Interpretation Combined
+A common use case is to combine source node and relationship interpretation. 
+```yaml
+- implementation: nodestream.interpreting:Interpreter
+  arguments:
+    interpretations:
+    - type: source_node
+      node_type: Person
+      key:
+        name: !jmespath name
+      allow_create: true
+    - type: relationship
+      node_type: Person
+      relationship_type: HAS_CHILD
+      node_creation_rule: MATCH_ONLY
+      iterate_on: !jmespath children[*]
+      node_key:
+        name: !jmespath name
+```
+In this example, `source_node` has the flag `allow_create=true` while the 
+relationship has `node_creation_rule=MATCH_ONLY`. This means `Person` 
+nodes will be created if they don't already exist using the `source_node` interpretation,
+but the children `Person` nodes will not be created as part of the `relationship` interpretation. 
+The `relationship` interpretation will only create the relationships between existing persons.
+
+
+Below is a comprehensive list of possible behaviors depending on pipeline configuration and graph state:
+
+#### Given: Source node does not exist in the graph
+<table>
+  <thead>
+    <tr>
+      <th rowspan="2"></th>
+      <th rowspan="2"></th>
+      <th colspan="2">Related Node</th>
+    </tr>
+    <tr>
+      <th>Already Exists</th>
+      <th>Does Not Exist</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="2">source_node.allow_create=true</td>
+      <td>relationship.node_creation_rule=EAGER</td>
+      <td>Source Node and Relationship are created</td>
+      <td>Everything is created</td>
+    </tr>
+    <tr>
+      <td>relationship.node_creation_rule=MATCH_ONLY</td>
+      <td>Source Node and Relationship are created</td>
+      <td>Source Node is created</td>
+    </tr>
+    <tr>
+      <td rowspan="2">source_node.allow_create=false</td>
+      <td>relationship.node_creation_rule=EAGER</td>
+      <td>Nothing is created</td>
+      <td>Related node is created</td>
+    </tr>
+    <tr>
+      <td>relationship.node_creation_rule=MATCH_ONLY</td>
+      <td>Nothing is created</td>
+      <td>Nothing is created</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Given: Source node already exists in the graph
+<table>
+  <thead>
+    <tr>
+      <th rowspan="2"></th>
+      <th rowspan="2"></th>
+      <th colspan="2">Related Node</th>
+    </tr>
+    <tr>
+      <th>Already Exists</th>
+      <th>Does Not Exist</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="2">source_node.allow_create=true</td>
+      <td>relationship.node_creation_rule=EAGER</td>
+      <td>Relationship is created</td>
+      <td>Related Node and Relationship are created</td>
+    </tr>
+    <tr>
+      <td>relationship.node_creation_rule=MATCH_ONLY</td>
+      <td>Relationship is created</td>
+      <td>Nothing is created</td>
+    </tr>
+    <tr>
+      <td rowspan="2">source_node.allow_create=false</td>
+      <td>relationship.node_creation_rule=EAGER</td>
+      <td>Relationship is created</td>
+      <td>Related Node and Relationship are created</td>
+    </tr>
+    <tr>
+      <td>relationship.node_creation_rule=MATCH_ONLY</td>
+      <td>Relationship is created</td>
+      <td>Nothing is created</td>
+    </tr>
+  </tbody>
+</table>
 
 ## Normalizers
 

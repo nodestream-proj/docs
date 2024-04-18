@@ -130,8 +130,8 @@ The first interpretation is a `source_node` interpretation that describes how to
 ```
 
 A source node represents the node at the conceptual "center" of the ingest. 
-Typically this represents the central entity that you are modeling with the Ingest. 
-In our case, its the employee for whom the record represents. 
+Typically, this represents the central entity that you are modeling with the Ingest. 
+In our case, it's the employee for whom the record represents. 
 We've decided to call this type of node an `Employee`.
 
 The `key` block tells nodestream what set of properties represents a unique node of the `node_type` and how to get the values. 
@@ -139,6 +139,8 @@ In our case, we use the employee_id field the record and extract that using the 
 
 We take a similar approach with the properties field. We extract the `name` property.
 Note that we have kept the field names on the node the same as the CSV document, but this does not need to be the case.
+
+See Also: [Reference documentation for source node interpretation](../reference/interpreting.md#source-node-interpretation)
 
 ### Relationship Interpretation
 
@@ -156,6 +158,9 @@ In our case, we want to model the org chart, so we need to draw the relationship
 Here we tell the interpreter that we want to relate to an `Employee` to our source node with a relationship type of `REPORTS_TO`. 
 For nodestream to know which `Employee` node to relate to, we need to specify the key of the related node. 
 In our case, we can do that by extracting the value of `manager_id` and mapping it to the `employee_id` key of the related node.
+
+See Also: [Reference documentation for relationship interpretation](../reference/interpreting.md#relationship-interpretation)
+
 
 ## Next Steps
 
