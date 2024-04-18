@@ -54,6 +54,7 @@ Starting with this release, you use the `--database` flag to generate neptune bo
 
 Core Contributors to this feature include:
 - [Zach Probst](https://github.com/zprobst)
+- [Alex Le](https://github.com/aryex)
 - [Cole Greer](https://github.com/Cole-Greer)
 - [Dave Bechberger](https://github.com/bechbd)
 - [Alexey Temnikov](https://github.com/alexey-temnikov)
