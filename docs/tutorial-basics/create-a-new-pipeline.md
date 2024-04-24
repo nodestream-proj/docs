@@ -159,4 +159,4 @@ In our case, we can do that by extracting the value of `manager_id` and mapping 
 
 ## Next Steps
 
-Now that you've created a new pipeline, you can [prepare your database](./prepare-your-database.md) to load the data into your database.
+Now that you've created a new pipeline, you can [prepare your database](./prepare-your-database.mdx) to load the data into your database.
