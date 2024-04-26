@@ -90,3 +90,19 @@ This node will have a name property that is set to the name of the migration.
 Additionally, the plugin will create a `__NodestreamMigrationLock__` node in the database. 
 This node will be exit when the migration process is running and will be deleted when the migration process is complete. 
 This is used to prevent multiple migration processes from running at the same time.
+
+### Reloading Credentials
+
+You may wish to implement a mechanism to reload credentials from the environment variables or a secret manager at runtime.
+To do this, you can use the `!delayed` tag in the `nodestream.yml` file to delay the evaluation of the value until runtime.
+
+```yaml
+targets:
+  my-target:
+    database: neo4j 
+    uri: bolt://localhost:7687
+    username: !delayed 
+      value: !env MY_NEO4J_USERNAME
+    password: !delayed
+      value: !env MY_NEO4J_PASSWORD
+```

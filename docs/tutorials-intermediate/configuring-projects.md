@@ -149,6 +149,23 @@ You _may_ specify targets inside of your project configuration, by specifying th
 :::
 
 
+#### Delaying Evaluation with `!delayed`
+
+The `!delayed` argument resolver delays the evaluation of the argument until the consuming component (if supported) is ready to evaluate it.
+This is useful for injecting configuration that is not available at the time of pipeline definition or for allowing the component to re-evaluate the argument at runtime.
+For instance, the neo4j connector can accept  `!delayed` for the username and password arguments.
+
+```yaml
+targets:
+  my-target:
+    database: neo4j 
+    uri: bolt://localhost:7687
+    username: !delayed 
+      value: !env MY_NEO4J_USERNAME
+    password: !delayed
+      value: !env MY_NEO4J_PASSWORD
+```
+
 ### Scopes And Pipelines
 
 A nodestream project is a collection of pipelines.
