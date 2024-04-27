@@ -1,6 +1,6 @@
 # Nodestream Neptune Support
 
-The recent release of Nodestream 0.12 has introduced support for Amazon Neptune as the first step towards broader multi-database support. Nodestream provides a flexible tool to perform bulk ETL into Amazon Neptune Database and Amazon Neptune Analytics.
+The recent [release of Nodestream 0.12](../../../../2024/04/05/nodestream-0-12/) has introduced support for Amazon Neptune as the first step towards broader multi-database support. Nodestream provides a flexible tool to perform bulk ETL into Amazon Neptune Database and Amazon Neptune Analytics.
 
 This post will give a quick overview of the new Amazon Neptune support, offer some examples to get started, and list some features planned for future releases.
 
@@ -12,7 +12,7 @@ Support for AWS Neptune is split into two modes, DB and Analytics. Both modes le
 
 Nodestream with Neptune currently supports standard ETL pipelines as well as time to live (TTL) pipelines. ETL pipelines enable bulk data ingestion into Neptune from a much broader range of data sources and formats than have previously been possible in Neptune.
 
-Nodestream's TTL mechanism also enables new capabilities not previously available in Neptune. By annotating ingested graph elements with timestamps, Nodestream is able to create pipelines which automatically expire and remove data that has passed a configured lifespan.
+[Nodestream's TTL mechanism](../../../../../docs/docs/tutorials-intermediate/removing-data/) also enables new capabilities not previously available in Neptune. By annotating ingested graph elements with timestamps, Nodestream is able to create pipelines which automatically expire and remove data that has passed a configured lifespan.
 
 ## Usage
 
