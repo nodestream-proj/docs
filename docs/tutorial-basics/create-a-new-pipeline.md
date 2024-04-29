@@ -164,4 +164,4 @@ See Also: [Reference documentation for relationship interpretation](../reference
 
 ## Next Steps
 
-Now that you've created a new pipeline, you can [prepare your database](./prepare-your-database.md) to load the data into your database.
+Now that you've created a new pipeline, you can [prepare your database](./prepare-your-database.mdx) to load the data into your database.

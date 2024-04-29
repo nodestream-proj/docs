@@ -2,6 +2,9 @@
 sidebar_position: 4
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Prepare Your Database
 Configure your database for use with Nodestream.
 
@@ -50,29 +53,52 @@ Run `nodestream migrations run` to apply the migration.
 Before you can run the migrations or a pipeline, you'll need to configure your database connection.
 To do this, open the `nodestream.yaml` file in the root of your project and add you should see a section like this:
 
-```yaml
-targets:
-  my-db:
-    database: neo4j
-    password: neo4j123
-    uri: bolt://localhost:7687
-    username: neo4j
-```
+<Tabs
+    defaultValue="neo4j"
+    values={[
+        {label: 'neo4j', value: 'neo4j'},
+        {label: 'Amazon Neptune', value: 'neptune'},
+    ]}>
+    <TabItem value="neo4j">
+        ```yaml
+        targets:
+          my-db:
+            database: neo4j
+            password: neo4j123
+            uri: bolt://localhost:7687
+            username: neo4j
+        ```
+        Replace the `uri`, `username`, and `password` with the connection details for your database.
 
-Replace the `uri`, `username`, and `password` with the connection details for your database.
+        If you just want to get up and running quickly, you can use run this docker command to start a local Neo4j instance with the same default credentials:
 
-If you just want to get up and running quickly, you can use run this docker command to start a local Neo4j instance with the same default credentials:
+        ```bash
+        docker run \
+            --restart always \
+            --publish=7474:7474 --publish=7687:7687 \
+            --env NEO4J_AUTH=neo4j/neo4j123 \
+            --env NEO4J_PLUGINS='["apoc","bloom"]' \
+            neo4j:5
+        ```
 
-```bash
-docker run \
-    --restart always \
-    --publish=7474:7474 --publish=7687:7687 \
-    --env NEO4J_AUTH=neo4j/neo4j123 \
-    --env NEO4J_PLUGINS='["apoc","bloom"]' \
-    neo4j:5
-```
+        **WARNING:** Do not use the default credentials or credentials that are stored in your source code in a production (or really any) environment. Always use environment variables or a secrets manager to store your credentials. Read more about this [here](../../tutorials-intermediate/configuring-projects).
+    </TabItem>
+    <TabItem value="neptune">
+        ```yaml
+        targets:
+          my-neptune-db:
+            database: neptune
+            mode: database
+            host: https://[NEPTUNE_ENDPOINT]:[PORT]
+          my-neptune-analytics:
+            database: neptune
+            mode: analytics
+            graph_id: [GRAPH_IDENTIFIER]
+        ```
+        Set the `mode` to your desired flavor of Neptune, and replace either the `host` or `graph_id` with the connection details for your database.
+    </TabItem>
+</Tabs>
 
-**WARNING:** Do not use the default credentials or credentials that are stored in your source code in a production (or really any) environment. Always use environment variables or a secrets manager to store your credentials. Read more about this [here](../../tutorials-intermediate/configuring-projects).
 
 :::note 
 

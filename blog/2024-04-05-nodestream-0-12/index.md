@@ -44,7 +44,7 @@ Core Contributors to this feature include:
 Prior to this release, the only database that was supported was neo4j. 
 While this is a category leading database, the goal of nodestream is to be database agnostic and afford developer the ability to use the database or _databases_ that best fits their needs. 
 As such, we are happy to announce that nodestream now supports [Amazon Neptune](https://aws.amazon.com/neptune/) and [Amazon Neptune Analytics](https://docs.aws.amazon.com/neptune-analytics/latest/userguide/what-is-neptune-analytics.html).
-TO accomedate that, we have moved the neo4j database connector into a separate package called [nodestream-plugin-neo4j](https://pypi.org/project/nodestream-plugin-neo4j/) and added a new package called [nodestream-plugin-neptune](https://pypi.org/project/nodestream-plugin-neptune/).
+TO accommodate that, we have moved the neo4j database connector into a separate package called [nodestream-plugin-neo4j](https://pypi.org/project/nodestream-plugin-neo4j/) and added a new package called [nodestream-plugin-neptune](https://pypi.org/project/nodestream-plugin-neptune/).
 
 Starting with this release, you use the `--database` flag to generate neptune boilerplate configuration. 
 
@@ -65,7 +65,7 @@ Core Contributors to this feature include:
 ### Parquet Support
 
 Many customers have data stored in parquet format. 
-Paquet is a columnar storage format that is optimized for reading and writing large datasets.
+Parquet is a columnar storage format that is optimized for reading and writing large datasets.
 We are happy to announce that nodestream now supports parquet as a first class citizen.
 
 **Check out the docs on it [here](/docs/docs/reference/extractors/#the-file-extractor-family)**.
