@@ -3,3 +3,13 @@ zprobst:
   title: Maintainer of Nodestream
   url: https://github.com/zprobst
   image_url: https://github.com/zprobst.png
+bechbd:
+  name: Dave Bechberger 
+  title: Neptune Plugin Architect and SBOM Plugin Creator
+  url: https://github.com/bechbd
+  image_url: https://github.com/bechbd.png
+Cole-Greer:
+  name: Cole Greer
+  title: Neptune Plugin Maintainer
+  url: https://github.com/Cole-Greer
+  image_url: https://github.com/Cole-Greer.png
