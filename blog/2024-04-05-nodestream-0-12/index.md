@@ -1,3 +1,9 @@
+---
+title: Nodestream 0.12 Release
+authors: [zprobst]
+tags: [release, nodestream]
+---
+
 # Nodestream 0.12 Release
 
 We are happy to announce the release of Nodestream 0.12. 
