@@ -109,7 +109,7 @@ Some of them are more organizational than technical.
 
 However, some of the technical ones are:
 
-- **All Database Artifacts are Version Cntrolled with Application Code:** Nodestream's migrations are inteded to source controlled files that are run in sequence and define their dependencies. This makes it easy to evolve changes and continuously integrate them (which is another of the characteristics).
+- **All Database Artifacts are Version Controlled with Application Code:** Nodestream's migrations are intended to be source controlled files that are run in sequence and define their dependencies. This makes it easy to evolve changes and continuously integrate them (which is another of the characteristics).
 - **All database changes are database refactorings** Nodestream's migrations are a series of database refactorings that are run in sequence. This makes it easy to track changes to the schema over time and to apply those changes to multiple environments, such as development, staging, and production. We are detecting the changes that need to be made to the schema and applying them in a controlled and repeatable way.
 - **Clearly Separate Database Access Code** You generally don't need to write database access code in nodestream, so this is taken care of :fireworks:
 - **Automated the Refactorings** This is the main point of migrations. They are automated and can be run in sequence to evolve the schema.
