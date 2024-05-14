@@ -7,7 +7,7 @@ tags: [neptune, nodestream]
 
 # Nodestream Neptune Support
 
-The recent [release of Nodestream 0.12](/docs/blog/2024/04/05/nodestream-0-12/) has introduced support for Amazon Neptune as the first step towards broader multi-database support. Nodestream provides a flexible tool to perform bulk ETL into Amazon Neptune Database and Amazon Neptune Analytics.
+The recent [release of Nodestream 0.12](/docs/blog/0-12-release/) has introduced support for Amazon Neptune as the first step towards broader multi-database support. Nodestream provides a flexible tool to perform bulk ETL into Amazon Neptune Database and Amazon Neptune Analytics.
 
 This post will give a quick overview of the new Amazon Neptune support, offer some examples to get started, and list some features planned for future releases.
 

@@ -98,7 +98,7 @@ That process works roughly like this:
 - Nodestream keeps track of which migrations have been applied so that it can skip them in the future.
 
 Crucially, nodestream does not track all possible schema changes. 
-Topological changes are not tracked, so you will need to handle those manually.
+Topological changes are not tracked(see [here](#topological-changes)), so you will need to handle those manually.
 Additionally, nodestream does not support rolling back migrations, so you will need to handle that manually as well.
 
 ## Are Migrations Any Good?
