@@ -1,5 +1,4 @@
 ---
-slug: sbom-neptune-nodestream
 title: Software Vulnerability Analysis using SBOMs, Amazon Neptune, and Nodestream
 authors: [bechbd]
 tags: [sbom, nodestream]

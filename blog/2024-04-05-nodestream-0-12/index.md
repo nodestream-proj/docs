@@ -1,5 +1,4 @@
 ---
-slug: 0-12-release
 title: Nodestream 0.12 Release
 authors: [zprobst]
 tags: [release, nodestream]

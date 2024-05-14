@@ -1,5 +1,4 @@
 ---
-slug: migrations
 title: Migrations Design in Nodestream 0.12 
 authors: [zprobst]
 tags: [migrations, nodestream]
