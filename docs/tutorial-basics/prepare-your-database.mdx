@@ -69,6 +69,8 @@ To do this, open the `nodestream.yaml` file in the root of your project and add 
             username: neo4j
         ```
         Replace the `uri`, `username`, and `password` with the connection details for your database.
+        Be sure to setup your database with the APOC Plugin, otherwise you may get the following error when running your pipeline:
+        `There is no procedure with the name apoc.periodic.iterate registered for this database instance.`
 
         If you just want to get up and running quickly, you can use run this docker command to start a local Neo4j instance with the same default credentials:
 
