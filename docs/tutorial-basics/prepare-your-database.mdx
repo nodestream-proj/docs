@@ -16,7 +16,7 @@ In this tutorial, we'll walk you through preparing your database for use with No
 
 Nodestream uses a concept called "database migrations" to manage changes to your database schema over time.
 Despite graph databases generally not having an enforced schema, `nodestream` uses a schema to define the structure of your data.
-Additionally, it uses migrations to suggest indexe and constraints to the database to improve performance and data integrity (e.g. unique constraints) where the database supports it.
+Additionally, it uses migrations to suggest indexes and constraints to the database to improve performance and data integrity (e.g. unique constraints) where the database supports it.
 As your application evolves, you'll need to make changes to your database schema to accommodate new features or bug fixes.
 In nodestream this is achieved by making changes to your pipelines file.
 Nodestream will then generate the necessary migrations for you.

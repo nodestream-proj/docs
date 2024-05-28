@@ -178,7 +178,7 @@ This works by zipping the `first_name` and `last_name` arrays together and creat
 
 ### `iterate_on` Key
 
-The `iterate_on` key is similar to the `find_many` key in the sense that it allows you to connect to more than one node at a time in the same relationship interpretation. However, it is more flexible in that allows you to iterate over an arbitrary structure and bind the keys (and properties) relative to the current iteration. What the heck does that mean? Let's see an example.
+The `iterate_on` key is similar to the `find_many` key in the sense that it allows you to connect to more than one node at a time in the same relationship interpretation. However, it is more flexible in that it allows you to iterate over an arbitrary structure and bind the keys (and properties) relative to the current iteration. What the heck does that mean? Let's see an example.
 
 Consider the data we used in the previous example:
 
