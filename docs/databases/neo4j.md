@@ -19,6 +19,14 @@ To use Neo4j with Nodestream, you'll need to have a Neo4j database running and a
 Additionally, you'll need to have the [APOC library](https://neo4j.com/labs/apoc/) installed in your Neo4j database.
 Internally, Nodestream uses the APOC library to perform various operations on the database, such as batch importing data.
 
+## Recommended Deployment Patterns
+
+There are two primary ways to deploy Neo4j. 
+- [Neo4j Aura](https://console.neo4j.io) is a fully managed DBaaS offering that makes it easy to get started with Neo4j without managing infrastructure. There are several different tiers available, but you can get started for free [here](https://console.neo4j.io).
+- Self managed Neo4j is available to [download](https://neo4j.com/deployment-center/) and install on the infrastructure of your choosing. Community Edition is free to download and use, and Enterprise Edition requires a commercial license. The [Neo4j Documentation](https://neo4j.com/docs/operations-manual/current/installation/) outlines the various ways to deploy and run self-managed neo4j (including Kubernetes, Docker, Cloud Marketplaces, etc.)
+  - Additionally, AWS CloudFormation is a service provided by Amazon Web Services that enables users to model and manage infrastructure resources in an automated and secure manner. [These templates](https://github.com/neo4j-partners/amazon-cloud-formation-neo4j/tree/main) can be used to deploy Neo4j in your own AWS account.  
+
+
 ## Compatibility Matrix
 
 Nodestream has been tested with the following versions of Neo4j:
