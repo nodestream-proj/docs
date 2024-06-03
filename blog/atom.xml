@@ -318,8 +318,14 @@ Running the query below shows us that there are 31 <code>Components</code> that 
 <p>We see that there exists one path in our graph between these two licenses.</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="next-steps">Next Steps<a href="https://nodestream-proj.github.io/docs/blog/2024/04/05/nodestream-sbom-preview#next-steps" class="hash-link" aria-label="Direct link to Next Steps" title="Direct link to Next Steps">​</a></h2>
 <p>As we have seen, using graphs to perform analysis of SBOM data can be a powerful tool in your toolbox to gain insights into the connections between software projects. What I have shown here is only the beginning of the types of analysis you can perform with this data. For a more detailed walkthrough of using graphs for SBOM analysis, I recommend taking a look at the following notebooks:</p>
-<p><a href="https://github.com/aws/graph-notebook/blob/ISSUE-558/src/graph_notebook/notebooks/02-Neptune-Analytics/03-Sample-Use-Cases/03-Software-Bill-Of-Materials/01-SBOM-Dependency-Analysis.ipynb" target="_blank" rel="noopener noreferrer">SBOM Dependency Analysis</a>
-<a href="https://github.com/aws/graph-notebook/blob/ISSUE-558/src/graph_notebook/notebooks/02-Neptune-Analytics/03-Sample-Use-Cases/03-Software-Bill-Of-Materials/02-SBOM-Vulnerability-Analysis.ipynb" target="_blank" rel="noopener noreferrer">SBOM Vulnerability Analysis</a></p>]]></content>
+<ul>
+<li>
+<p><a href="https://github.com/aws/graph-notebook/blob/main/src/graph_notebook/notebooks/02-Neptune-Analytics/03-Sample-Use-Cases/03-Software-Bill-Of-Materials/01-SBOM-Dependency-Analysis.ipynb" target="_blank" rel="noopener noreferrer">SBOM Dependency Analysis</a></p>
+</li>
+<li>
+<p><a href="https://github.com/aws/graph-notebook/blob/main/src/graph_notebook/notebooks/02-Neptune-Analytics/03-Sample-Use-Cases/03-Software-Bill-Of-Materials/02-SBOM-Vulnerability-Analysis.ipynb" target="_blank" rel="noopener noreferrer">SBOM Vulnerability Analysis</a></p>
+</li>
+</ul>]]></content>
         <author>
             <name>Dave Bechberger</name>
             <uri>https://github.com/bechbd</uri>
