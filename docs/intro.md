@@ -31,7 +31,7 @@ Nodestream is available on PyPI and can be installed using pip.
 pip install nodestream
 ```
 
-However, nodestream is a cli tool and you may prefer to install it globally and isolated with pipx.
+However, nodestream is a CLI tool and you may prefer to install it globally and isolated with pipx.
 
 ```bash
 pipx install nodestream

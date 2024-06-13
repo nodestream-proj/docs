@@ -14,6 +14,11 @@ That is super easy to do with Nodestream. Just run the following command:
 nodestream run
 ```
 
+Or run the following command with your desired target name found in the `nodestream.yaml` file:
+```bash
+nodestream run --target target-name
+```
+
 When you run this command, Nodestream will execute all pipelines in your project and load the data into your database.
 
 If you'd rather be explicit (or selective) about which pipelines to run, you can specify the pipeline name(s) as an argument to the `run` command:

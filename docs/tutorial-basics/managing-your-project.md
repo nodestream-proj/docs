@@ -10,7 +10,7 @@ In this tutorial, we'll walk you through managing your Nodestream project.
 
 ## Viewing the State of Your Project
 
-To view the state of your project, you can use the `nodestream show` command. 
+To view the state of your project, cd into the project repository and use the `nodestream show` command. 
 This command will display the state of your project, including the pipelines that are defined.
 
 ```bash
@@ -66,7 +66,7 @@ When you run this command, you'll see a more detailed JSON representation of the
 To remove a pipeline from your project, you can use the `nodestream remove` command.
 
 ```bash
-nodestream remove defaut sample
+nodestream remove default sample
 ```
 
 This command will remove the pipeline with the name `sample` from the project in the `default` scope.
