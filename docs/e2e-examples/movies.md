@@ -164,8 +164,8 @@ We'll need to add a new step to the pipeline to ingest the data into the graph.
         find_many: true
         node_key:
           id: !split 
-            data: !jmespath genres
-            delimiter: '|'
+          data: !jmespath genres
+          delimiter: '|'
 ```
 
 This will tell the pipeline to interpret the data and create the `Movie` nodes.

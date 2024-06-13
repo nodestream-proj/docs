@@ -51,6 +51,7 @@ These configuration values are available for the Neo4j database and can be set i
 |---------------------------|----------------------------------------------------------------------------------------------------------------------|---------------------|---------|
 | `mode`                    | Either `database` or `analytics`, select which type of Amazon Neptune to target.                                     | ✅                   | N/A     |
 | `host`                    | The cluster or instance endpoint and port to use when connecting to the Neptune database.                            | If `mode=database`  | N/A     |
+| `region`                  | The AWS region to use when connecting to the Amazon Neptune.                                                         | No                  | None    |
 | `graph_id`                | The graph identifier to use when connecting to Neptune Analytics.                                                    | If `mode=analytics` | N/A     |
 | "arbitrary values"        | Any other values that are valid for the boto3 [Neptune Database](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/neptunedata.html) or [Neptune Analytics](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/neptune-graph.html) clients can be set here. | ❌        | N/A  |
 
