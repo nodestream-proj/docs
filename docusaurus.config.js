@@ -1,4 +1,5 @@
 import {themes as prismThemes} from 'prism-react-renderer';
+import search from "@cmfcmf/docusaurus-search-local";
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -57,6 +58,8 @@ const config = {
       })
     ],
   ],
+
+  plugins: [search],
 
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
