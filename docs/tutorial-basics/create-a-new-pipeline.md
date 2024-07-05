@@ -61,9 +61,29 @@ As a reminder, the file should look like this:
   implementation: nodestream.interpreting:Interpreter
 ```
 
-Every pipeline is a list of steps that describe how to load the data into your database. 
-The first step in the pipeline is to extract the data from the file and the second step is to interpret the data into nodes and relationships.
-For now, leave the second step as it is and replace the first step with the following:
+Every pipeline is a list of steps that describe how to load the data into your database.
+The first section in the pipeline is to extract the data from the file.
+
+```yaml
+- arguments:
+    stop: 100000
+  factory: range
+  implementation: nodestream.pipeline:IterableExtractor
+```
+
+The second section is to interpret the data into nodes and relationships.
+
+```yaml
+- arguments:
+    interpretations:
+    - key:
+        number: !jmespath 'index'
+      node_type: Number
+      type: source_node
+  implementation: nodestream.interpreting:Interpreter
+```
+
+For now, leave the second section as it is and replace the first section with the following:
 
 ```yaml
 - implementation: nodestream.pipeline.extractors:FileExtractor
@@ -92,7 +112,7 @@ You are NOT limited to CSV files. Nodestream has many extractors that can load d
 
 The next step in the pipeline is to interpret the data into nodes and relationships.
 In this example, we want to interpret the data into `Employee` nodes and `reports to` relationships.
-To do this, we need to update the second step in the pipeline to look like this:
+To do this, we need to update the second section in the pipeline to look like this:
 
 ```yaml
 - implementation: nodestream.interpreting:Interpreter
@@ -111,14 +131,15 @@ To do this, we need to update the second step in the pipeline to look like this:
         employee_id: !jmespath 'manager_id'
 ```
 
-The step you will spend the most time with is the `Interpreter` step.
+The next section you will spend the most time with is the `Interpreter` step.
 The `Interpreter` step is responsible for interpreting the data into nodes and relationships.
 The `Interpreter` step expects a list of interpretations passed as an argument in the `arguments` section.
 Each interpretation is a dictionary that describes how to interpret the data into nodes and relationships.
-In this example, we have two interpretations.
+In the following example, we will explain the two interpretations from when we updated the second section.
 
 ### Source Node Interpretation
-The first interpretation is a `source_node` interpretation that describes how to interpret the data into `Employee` nodes.
+The following section is the first interpretation, which is a `source_node` interpretation.
+It describes how to interpret the data into `Employee` nodes.
 
 ```yaml
 - type: source_node
@@ -130,7 +151,7 @@ The first interpretation is a `source_node` interpretation that describes how to
 ```
 
 A source node represents the node at the conceptual "center" of the ingest. 
-Typically, this represents the central entity that you are modeling with the Ingest. 
+Typically, this represents the central entity that you are modeling with the ingest. 
 In our case, it's the employee for whom the record represents. 
 We've decided to call this type of node an `Employee`.
 
@@ -145,7 +166,7 @@ See Also: [Reference documentation for source node interpretation](../reference/
 ### Relationship Interpretation
 
 A graph database would be a lot less useful if we did not create relationships to other data. 
-In our case, we want to model the org chart, so we need to draw the relationship to the employee's boss.
+In our case, we want to model the org chart, so the following section draws the relationship to the employee's boss.
 
 ```yaml
 - type: relationship
