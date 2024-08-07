@@ -74,6 +74,31 @@ If you have multiple databases, you can use the `--target` option repeatedly to 
 nodestream migrations run --target default --target other
 ```
 
+## Squash Migrations 
+
+Nodestream supports squashing migrations. 
+This means that you can take a set of migrations and squash them into a single, optimized set of migrations.
+This can be useful for cleaning up the migration node count and making it easier to understand the data model. 
+Additionally, the old migrations are still stored in the project, so you can always go back to them if you need to. 
+If a database has partially applied a sequence of migrations that was squashed, we can't used the squashed migration.
+Instead, the logic will fall back to the original migrations. 
+
+To squash migrations, use the `nodestream migrations squash` command.
+This command requires passing the `--from` migration and optionally the `-to` migration to squash.
+
+Lets assume you have migrations from 1 to 5 and you want to squash them into a single migration. 
+You can run the following command:
+
+```bash
+nodestream migrations squash --from 1 --to 5
+```
+
+If `5` is the last migration, you can squash all migrations up to `5` by running:
+
+```bash
+nodestream migrations squash --from 1
+```
+
 ## Rollback Migrations
 
 Currently, nodestream does not support rolling back migrations.
