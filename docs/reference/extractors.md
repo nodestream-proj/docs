@@ -19,24 +19,65 @@ Each of these extractors converts the data from the file in a consistent way acr
 - **`.txt`** files are supported by default and yield each line of the text file as a dictionary to the next step in the pipeline. (The key is `line` and the value is the line of text.)
 - **`.yaml`** files are supported by default and yield the entire YAML object to the next step in the pipeline.
 
+Compressed file formats are also supported: 
 
-### `FileExtractor`
+-  `.gz`: `{File Format Extension}.gz` files are decompressed using `gzip.open` and stripped of the .gz extension and processed in the subsequent extension.
+- `.bz2`: `{File Format Extension}.bz2` files are decompressed using `bz2.open` and stripped of the .bz2 extension and processed in the subsequent extension.
 
-The `FileExtractor` is used to pull data from a file on the local filesystem.
-The `FileExtractor` is accessible via the `implementation` string `nodestream.pipeline.extractors:FileExtractor`.
-The arguments for the `FileExtractor` are:
+
+### `UnifiedFileExtractor`
+
+The `UnifiedFileExtractor` is used to pull data from a file on the local filesystem, an HTTP server, or an S3 bucket.
+The `UnifiedFileExtractor` is accessible via the `implementation` string `nodestream.pipeline.extractors.files:UnifiedFileExtractor`.
+
+The arguments for the `UnifiedFileExtractor` are:
+
+| Argument  | Description                          | Type         | Required | Default Value |
+| --------- | ------------------------------------ | ------------ | -------- | ------------- |
+| `sources` | A list of sources to pull data from. | `List[Dict]` | Yes      | N/A           |
+
+Each object in the `sources` list should include a `type` key that specifies the type of extractor to use and the arguments for that extractor.
+
+For example, to pull data from a local file, an HTTP server, and an S3 bucket, you would use the following configuration:
+
+```yaml
+implementation: nodestream.pipeline.extractors.files:UnifiedFileExtractor
+arguments:
+  sources:
+    - type: local
+      globs:
+        - /path/to/local/file.csv
+    - type: remote
+      urls:
+        - https://example.com/remote/file.csv
+    - type: s3
+      bucket: my-bucket
+      prefix: path/to/s3/file.csv
+```
+
+#### Local Arguments
+
+The arguments for the `local` source are:
 
 | Argument | Description                                            | Type        | Required | Default Value |
 | -------- | ------------------------------------------------------ | ----------- | -------- | ------------- |
 | `globs`  | A list of glob strings representing the files to load. | `List[str]` | Yes      | N/A           |
 
 
-### `S3Extractor`
 
-The `S3Extractor` is used to pull data from a file in an S3 bucket.
-The `S3Extractor` is accessible via the `implementation` string `nodestream.pipeline.extractors.stores.aws:S3Extractor`.
-The arguments for the `S3Extractor` are:
+#### Remote Arguments
 
+The arguments for the `remote` source are:
+
+| Argument                     | Description                                    | Type        | Required | Default Value |
+| ---------------------------- | ---------------------------------------------- | ----------- | -------- | ------------- |
+| `urls`                       | A list of URLs representing the files to load. | `List[str]` | Yes      | N/A           |
+| `memory_spooling_size_in_mb` | The size of the memory spooling buffer in MB.  | `int`       | No       | `10`          |
+
+
+#### S3 Arguments
+
+The arguments for the `s3` source are:
 
 | Argument                  | Description                                                                                                                                                                             | Type  | Required | Default Value |
 | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- | -------- | ------------- |
@@ -49,16 +90,32 @@ The arguments for the `S3Extractor` are:
 | `**session_args`          | Additional arguments to pass to the [boto3.Session](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html) function.                                      | `str` | No       | `{}`          |
 
 
-### `RemoteFileExtractor`
+### `QueueConnector`
 
-The `RemoteFileExtractor` is used to pull data from an HTTP server.
-The `RemoteFileExtractor` is accessible via the `implementation` string `nodestream.pipeline.extractors:RemoteFileExtractor`.
-The arguments for the `RemoteFileExtractor` are:
+The `QueueConnector` describes how to poll data from the underlying queue mechanism.
 
-| Argument                     | Description                                    | Type        | Required | Default Value |
-| ---------------------------- | ---------------------------------------------- | ----------- | -------- | ------------- |
-| `urls`                       | A list of URLs representing the files to load. | `List[str]` | Yes      | N/A           |
-| `memory_spooling_size_in_mb` | The size of the memory spooling buffer in MB.  | `int`       | No       | `10`          |
+#### `AWS SQS`
+
+```yaml
+- implementation: nodestream.pipeline.extractors.queues:QueueExtractor
+  arguments:
+     # rest of the stream extractor format arguments
+     connector: sqs
+     queue_url: "https://sqs.us-east-1.amazonaws.com/177715257436/MyQueue"
+```
+
+### Additional Arguments
+With the previous minimal configuration, it will use your currently active aws credentials to read messages from
+`https://sqs.us-east-1.amazonaws.com/177715257436/MyQueue`. However, there are many options you can add to this:
+
+| Parameter Name          	| Type   	| Description                                                                                                                                                                               	|
+|-------------------------	|--------	|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
+| message_system_attribute_names                  	| String 	| A list of attributes that need to be returned along with each message. (Default: "All")                                                                                                     	|
+| message_attribute_names                  	| String 	| A list of attribute names to receive. (Default: "All")                                                                                                     	|
+| delete_after_read                  	| Boolean 	| Deletes the batch of messages from the queue after they are yielded to the next pipeline step. (Default: True)               
+| assume_role_arn         	| String 	| The ARN of a role to assume before interacting with the SQS Queue. Of course the appropriate configuration is needed on both the current credentials as well as the target role.             	|
+| assume_role_external_id 	| String 	| The external id that is required to assume role. Only used when `assume_role_arn` is set and only needed when the role is configured to require an external id.                           	|
+| **session_args          	| Any    	| Any other argument that you want sent to the [boto3.Session](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html) that will be used to interact with AWS. 	|
 
 
 ## `StreamExtractor`
@@ -121,6 +178,38 @@ The arguments for the `SimpleApiExtractor` are:
 | `headers`            | A dictionary of headers to send with the request.                                      | `dict` | No       | `{}`                             |
 
 
+## `DynamoDBExtractor`
+
+The `DynamoDBExtractor` issues a query to an Amazon DynamoDB table using the scan method. The details on this AWS api call can be found [here](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/dynamodb/client/scan.html), and some of the parameters that are exposed by the interface are shown below. 
+
+```yaml
+- implementation: nodestream.pipeline.extractors.stores.aws:AthenaExtractor
+  arguments:
+    table_name: test_table;
+    limit: 100
+    scan_filter:
+      attribute_name:
+        AttributeValueList:
+        - S: 'some_string'
+        ComparisonOperator: 'EQ'
+    projection_expression: 'string expression'
+    filter_expression: 'string expression'
+```
+
+The arguments for the `DynamoDBExtractor` are:
+
+| Parameter Name          	| Type   	| Description                                                                                                                                                                               	|
+|-------------------------	|--------	|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
+| table_name                   	| String 	| The name of the dynamoDB table within the account.                                                                 	|
+| limit               	| Integer 	| The maximum number of records to be collected from the table for each call.                 	|
+| scan_filter         	| Dict 	| Filter for the results to be returned, does not minimize DynamoDB credit usage. See [DynamoDB Scan Docs](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/dynamodb/client/scan.html) for detailed information on use.                            	|
+| projection_expression                	| String 	| String expression for projecting the results. See [DynamoDB Projection Docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html) for detailed information on the format.  |
+| filter_expression                	| String 	| String expression for filtering the results (alternative to the scan_filter). See [DynamoDB Filter Docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Scan.html#Scan.FilterExpression) for detailed information on the format.   	|
+| assume_role_arn         	| String 	| The ARN of a role to assume before interacting with the bucket. Of course the appropriate configuration is needed on both the current credentials as well as the target role.             	|
+| assume_role_external_id 	| String 	| The external id that is required to assume role. Only used when `assume_role_arn` is set and only needed when the role is configured to require an external id.                           	|
+| **session_args          	| Any    	| Any other argument that you want sent to the [boto3.Session](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html) that will be used to interact with AWS. 	|
+
+
 ## `TimeToLiveConfigurationExtractor`
 
 The `TimeToLiveConfigurationExtractor` is used to pull data for a Time To Live Pipeline. 
@@ -132,8 +221,8 @@ The arguments for the `TimeToLiveConfigurationExtractor` are:
 | -------------------------- | ------------------------------------------------------------------------------------------------ | ---------------------- | -------- | ------------- |
 | `configurations`           | A list of configurations for the Time To Live pipeline.                                          | `List[Dict[str, Any]]` | Yes      | N/A           |
 | `graph_object_type`        | The type of object to apply the TTL to. (`NODE` or `RELATIONHIP`)                                | `str`                  | Yes      | N/A           |
-| `override_expiry_in_hours` | The number of hours after which the object should be deleted. Overrides any locally set version.
- | `int`                  | No       | N/A           |
+| `override_expiry_in_hours` | The number of hours after which the object should be deleted. Overrides any locally set version. |
+| `int`                      | No                                                                                               | N/A                    |
 
 
 Each object in the `configurations` list should include the following arguments:
