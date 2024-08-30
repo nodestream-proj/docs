@@ -68,7 +68,7 @@ const config = {
         title: 'Nodestream',
         logo: {
           alt: 'Nodestream Logo',
-          src: 'img/nodestream.png',
+          src: 'img/nodestream-light.png',
         },
         items: [
           {
