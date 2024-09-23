@@ -122,7 +122,7 @@ To do this, we need to update the second section in the pipeline to look like th
       key:
         employee_id: !jmespath 'employee_id'
       properties:
-        name: !jmespath 'name'
+        name: !jmespath 'employee_name'
       node_type: Employee
     - type: relationship
       node_type: Employee
