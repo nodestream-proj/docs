@@ -3,34 +3,13 @@
 Extractors are the start of a pipeline and are used to pull raw data from a source.
 Nodestream has a number of extractors built in and you can also [create your own](../../tutorials-advanced/new-steps/#creating-an-extractor).
 
-## The File Extractor Family
-
-There are a family of extractors that are used to pull data from files. These include:
-
-- `FileExtractor` - Used to pull data from a file on the local filesystem.
-- `RemoteFileExtractor` - Used to pull data from an HTTP server.
-- `S3Extractor` - Used to pull data from a file in an S3 bucket.
-
-Each of these extractors converts the data from the file in a consistent way across all of the extractors. 
-- **`.csv`** files are supported by default and yield each row of the csv file as a dictionary to the next step in the pipeline.
-- **`.json`** files are supported by default and yield the entire JSON object to the next step in the pipeline.
-- **`.jsonl`** files are supported by default and yield each line of the JSONL file as a dictionary to the next step in the pipeline.
-- **`.parquet`** files are supported by default and yield each row of the parquet file as a dictionary to the next step in the pipeline.
-- **`.txt`** files are supported by default and yield each line of the text file as a dictionary to the next step in the pipeline. (The key is `line` and the value is the line of text.)
-- **`.yaml`** files are supported by default and yield the entire YAML object to the next step in the pipeline.
-
-Compressed file formats are also supported: 
-
--  `.gz`: `{File Format Extension}.gz` files are decompressed using `gzip.open` and stripped of the .gz extension and processed in the subsequent extension.
-- `.bz2`: `{File Format Extension}.bz2` files are decompressed using `bz2.open` and stripped of the .bz2 extension and processed in the subsequent extension.
+## The File Extractor
 
 
-### `UnifiedFileExtractor`
+The `FileExtractor` is used to pull data from a file on the local filesystem, an HTTP server, or an S3 bucket.
+The `FileExtractor` is accessible via the `implementation` string `nodestream.pipeline.extractors.files:FileExtractor`.
 
-The `UnifiedFileExtractor` is used to pull data from a file on the local filesystem, an HTTP server, or an S3 bucket.
-The `UnifiedFileExtractor` is accessible via the `implementation` string `nodestream.pipeline.extractors.files:UnifiedFileExtractor`.
-
-The arguments for the `UnifiedFileExtractor` are:
+The arguments for the `FileExtractor` are:
 
 | Argument  | Description                          | Type         | Required | Default Value |
 | --------- | ------------------------------------ | ------------ | -------- | ------------- |
@@ -64,7 +43,6 @@ The arguments for the `local` source are:
 | `globs`  | A list of glob strings representing the files to load. | `List[str]` | Yes      | N/A           |
 
 
-
 #### Remote Arguments
 
 The arguments for the `remote` source are:
@@ -88,6 +66,21 @@ The arguments for the `s3` source are:
 | `assume_role_arn`         | The ARN of the role to assume when pulling data from S3.                                                                                                                                | `str` | No       | `""`          |
 | `assume_role_external_id` | The external ID to use when assuming the role.                                                                                                                                          | `str` | No       | `""`          |
 | `**session_args`          | Additional arguments to pass to the [boto3.Session](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html) function.                                      | `str` | No       | `{}`          |
+
+
+File types are handled in a consistent manner regardles of the source of the file:
+
+- **`.csv`** files are supported by default and yield each row of the csv file as a dictionary to the next step in the pipeline.
+- **`.json`** files are supported by default and yield the entire JSON object to the next step in the pipeline.
+- **`.jsonl`** files are supported by default and yield each line of the JSONL file as a dictionary to the next step in the pipeline.
+- **`.parquet`** files are supported by default and yield each row of the parquet file as a dictionary to the next step in the pipeline.
+- **`.txt`** files are supported by default and yield each line of the text file as a dictionary to the next step in the pipeline. (The key is `line` and the value is the line of text.)
+- **`.yaml`** files are supported by default and yield the entire YAML object to the next step in the pipeline.
+
+Compressed file formats are also supported: 
+
+-  `.gz`: `{File Format Extension}.gz` files are decompressed using `gzip.open` and stripped of the .gz extension and processed in the subsequent extension.
+- `.bz2`: `{File Format Extension}.bz2` files are decompressed using `bz2.open` and stripped of the .bz2 extension and processed in the subsequent extension.
 
 
 ### `QueueConnector`

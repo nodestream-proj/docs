@@ -74,7 +74,7 @@ Many customers have data stored in parquet format.
 Parquet is a columnar storage format that is optimized for reading and writing large datasets.
 We are happy to announce that nodestream now supports parquet as a first class citizen.
 
-**Check out the docs on it [here](/docs/docs/reference/extractors/#the-file-extractor-family)**.
+**Check out the docs on it [here](/docs/docs/reference/extractors/#the-file-extractor)**.
 
 Core Contributors to this feature include:
 - [Zach Probst](https://github.com/zprobst)

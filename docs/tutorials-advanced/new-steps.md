@@ -29,6 +29,40 @@ class ArrayExtractor(Extractor):
             yield record
 ```
 
+### Implmenting Checkpointing (Optional)
+
+If you want your extractor to be resumable from a checkpoint, you can implement the 
+`def make_checkpoint(self)` and `async def resume_from_checkpoint(self, checkpoint)` methods.
+The `make_checkpoint` method should return a checkpoint that can be used to resume the extractor. 
+A checkpoint can be any serializable object via `pickle`.
+The `resume_from_checkpoint` method should take a checkpoint and resume the extractor from that point.
+
+The following is an updated version of the `ArrayExtractor` that implements checkpointing.
+Nodestream automatically handles storing and retrieving the checkpoint from the object store
+and calling the `resume_from_checkpoint` method when the extractor is resumed. 
+
+
+```python
+from nodestream.pipeline import Extractor
+
+
+class ArrayExtractor(Extractor):
+    def __init__(self, array):
+        self.array = array
+        self.index = 0
+
+    async def extract_records(self):
+        for record in self.array[self.index:]:
+            yield record
+            self.index += 1
+
+    def make_checkpoint(self):
+        return self.index
+
+    async def resume_from_checkpoint(self, checkpoint):
+        self.index = checkpoint
+```
+
 
 ## Creating a Transformer
 
