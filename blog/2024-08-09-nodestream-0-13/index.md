@@ -23,7 +23,7 @@ This was a bit cumbersome for a couple of reasons:
 Starting with this release, we have unified these extractors into a single `UnifiedFileExtractor` extractor. 
 This extractor can handle local, remote, and S3 files (so functionality is not lost). 
 
-**Check out the docs on it [here](/docs/docs/reference/extractors/#the-file-extractor-family)**.
+**Check out the docs on it [here](/docs/docs/reference/extractors/#the-file-extractor)**.
 
 Core Contributors to this feature include:
 - [Zach Probst](https://github.com/zprobst)
@@ -67,7 +67,7 @@ Many users have data stored in compressed files.
 This release adds support for compressed files that are `.gz`, `.bz2` in format.
 This support is available in the `UnifiedFileExtractor` extractor.
 
-**Check out the docs on it [here](/docs/docs/reference/extractors#the-file-extractor-family)**.
+**Check out the docs on it [here](/docs/docs/reference/extractors#the-file-extractor)**.
 
 Core Contributors to this feature include:
 - [Grant Hoffman](https://github.com/grantleehoffman)
