@@ -4,10 +4,81 @@
         <title>Nodestream Blog</title>
         <link>https://nodestream-proj.github.io/docs/blog</link>
         <description>Nodestream Blog</description>
-        <lastBuildDate>Fri, 09 Aug 2024 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Mon, 24 Feb 2025 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
+        <item>
+            <title><![CDATA[Nodestream 0.14 Release]]></title>
+            <link>https://nodestream-proj.github.io/docs/blog/2025/02/24/nodestream-0-14</link>
+            <guid>https://nodestream-proj.github.io/docs/blog/2025/02/24/nodestream-0-14</guid>
+            <pubDate>Mon, 24 Feb 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[We are happy to announce the release of Nodestream 0.14.]]></description>
+            <content:encoded><![CDATA[<p>We are happy to announce the release of Nodestream 0.14.
+This release includes a number of new features and improvements.
+However, its breaking changes are minimal, so upgrading should be a breeze.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="breaking-changes">Breaking Changes<a href="https://nodestream-proj.github.io/docs/blog/2025/02/24/nodestream-0-14#breaking-changes" class="hash-link" aria-label="Direct link to Breaking Changes" title="Direct link to Breaking Changes">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="file-extractors">File Extractors<a href="https://nodestream-proj.github.io/docs/blog/2025/02/24/nodestream-0-14#file-extractors" class="hash-link" aria-label="Direct link to File Extractors" title="Direct link to File Extractors">​</a></h3>
+<p>In <code>0.13</code>, we introduced a united file handling extractor. However, we kept the old extractors around for backwards compatibility.
+Starting with this release, we have removed the old extractors and everything is now handled by
+the <code>UnifiedFileExtractor</code> extractor which is now renamed to <code>FileExtractor</code>.</p>
+<p><strong>Check out the docs on it <a href="https://nodestream-proj.github.io/docs/docs/reference/extractors/#the-file-extractor">here</a></strong>.</p>
+<p>Core Contributors to this feature include:</p>
+<ul>
+<li><a href="https://github.com/zprobst" target="_blank" rel="noopener noreferrer">Zach Probst</a></li>
+<li><a href="https://github.com/angelosantos4" target="_blank" rel="noopener noreferrer">Angelo Santos</a></li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="new-features">New Features<a href="https://nodestream-proj.github.io/docs/blog/2025/02/24/nodestream-0-14#new-features" class="hash-link" aria-label="Direct link to New Features" title="Direct link to New Features">​</a></h2>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="object-storage-apis">Object Storage APIs<a href="https://nodestream-proj.github.io/docs/blog/2025/02/24/nodestream-0-14#object-storage-apis" class="hash-link" aria-label="Direct link to Object Storage APIs" title="Direct link to Object Storage APIs">​</a></h2>
+<p>Nodestream now has a new object storage abstraction.
+These APIs allow steps in your pipeline to interact with object storage to persist data between executions.
+We see incredible value in this feature as it allows for more complex pipelines to be built.
+We've implemented serveral features in this relase that leverage this new abstraction.</p>
+<p>You can persist objects locally or in the cloud via AWS S3.
+Like large amounts of the framework it is plubbable and can be extended to support other object storage providers.</p>
+<p><strong>Check out the docs on it <a href="https://nodestream-proj.github.io/docs/docs/reference/object-storage/">here</a></strong>.</p>
+<p>Core Contributors to this feature include:</p>
+<ul>
+<li><a href="https://github.com/zprobst" target="_blank" rel="noopener noreferrer">Zach Probst</a></li>
+<li><a href="https://github.com/angelosantos4" target="_blank" rel="noopener noreferrer">Angelo Santos</a></li>
+<li><a href="https://github.com/ccloes" target="_blank" rel="noopener noreferrer">Chad Cloes</a></li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="extractor-checkpointing">Extractor Checkpointing<a href="https://nodestream-proj.github.io/docs/blog/2025/02/24/nodestream-0-14#extractor-checkpointing" class="hash-link" aria-label="Direct link to Extractor Checkpointing" title="Direct link to Extractor Checkpointing">​</a></h2>
+<p>Previously, extractors would always start from the beginning of their data source.
+If a pipeline crashed or was interrupted, the extractor would start from the beginning of the data source again.
+This lead to duplicate data being extracted, processed, and inserted into the database.</p>
+<p>Now with nodestream 0.14, extractors can now checkpoint their progress.
+This means that if a pipeline crashes or is interrupted, the extractor will be start from where it left off.
+To do this, the extractor will store a checkpoint via its object storage.
+Therefore, in order to use this feature, you must have object storage configured during your pipeline execution.
+Checkpoints are cleared when a pipeline is successfully completed.</p>
+<p>Curious how to implement this for your extractor? We've update the tutorial on it <a href="https://nodestream-proj.github.io/docs/docs/tutorials-advanced/new-steps/#creating-an-extractor">here</a>.</p>
+<p>Core Contributors to this feature include:</p>
+<ul>
+<li><a href="https://github.com/zprobst" target="_blank" rel="noopener noreferrer">Zach Probst</a></li>
+<li><a href="https://github.com/angelosantos4" target="_blank" rel="noopener noreferrer">Angelo Santos</a></li>
+<li><a href="https://github.com/ccloes" target="_blank" rel="noopener noreferrer">Chad Cloes</a></li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="record-schema-enforcement">Record Schema Enforcement<a href="https://nodestream-proj.github.io/docs/blog/2025/02/24/nodestream-0-14#record-schema-enforcement" class="hash-link" aria-label="Direct link to Record Schema Enforcement" title="Direct link to Record Schema Enforcement">​</a></h2>
+<p>Nodestream now has a new record schema enforcement feature.
+Nodestream pipelines tend to be highly dependent on the schema of the data being processed.
+Depending on the data source, the schema can change over time.
+This can lead to pipelines failing or producing incorrect results.</p>
+<p>With this new feature, you can now enforce a schema on your data.
+This means that if the schema of the data changes, the pipeline will skip or warn about
+the records that do not match the schema.</p>
+<p>Not only that, but you can also use this feature to automatically infer the
+schema of your data and then enforce it.</p>
+<p><strong>Check out the docs on it <a href="https://nodestream-proj.github.io/docs/docs/reference/filters/">here</a></strong>.</p>
+<p>Core Contributors to this feature include:</p>
+<ul>
+<li><a href="https://github.com/zprobst" target="_blank" rel="noopener noreferrer">Zach Probst</a></li>
+<li><a href="https://github.com/angelosantos4" target="_blank" rel="noopener noreferrer">Angelo Santos</a></li>
+<li><a href="https://github.com/ccloes" target="_blank" rel="noopener noreferrer">Chad Cloes</a></li>
+</ul>]]></content:encoded>
+            <category>release</category>
+            <category>nodestream</category>
+        </item>
         <item>
             <title><![CDATA[Nodestream 0.13 Release]]></title>
             <link>https://nodestream-proj.github.io/docs/blog/2024/08/09/nodestream-0-13</link>
@@ -27,7 +98,7 @@ This was a bit cumbersome for a couple of reasons:</p>
 </ul>
 <p>Starting with this release, we have unified these extractors into a single <code>UnifiedFileExtractor</code> extractor.
 This extractor can handle local, remote, and S3 files (so functionality is not lost).</p>
-<p><strong>Check out the docs on it <a href="https://nodestream-proj.github.io/docs/docs/reference/extractors/#the-file-extractor-family">here</a></strong>.</p>
+<p><strong>Check out the docs on it <a href="https://nodestream-proj.github.io/docs/docs/reference/extractors/#the-file-extractor">here</a></strong>.</p>
 <p>Core Contributors to this feature include:</p>
 <ul>
 <li><a href="https://github.com/zprobst" target="_blank" rel="noopener noreferrer">Zach Probst</a></li>
@@ -62,7 +133,7 @@ Instead, the logic will fall back to the original migrations.</p>
 <p>Many users have data stored in compressed files.
 This release adds support for compressed files that are <code>.gz</code>, <code>.bz2</code> in format.
 This support is available in the <code>UnifiedFileExtractor</code> extractor.</p>
-<p><strong>Check out the docs on it <a href="https://nodestream-proj.github.io/docs/docs/reference/extractors/#the-file-extractor-family">here</a></strong>.</p>
+<p><strong>Check out the docs on it <a href="https://nodestream-proj.github.io/docs/docs/reference/extractors/#the-file-extractor">here</a></strong>.</p>
 <p>Core Contributors to this feature include:</p>
 <ul>
 <li><a href="https://github.com/grantleehoffman" target="_blank" rel="noopener noreferrer">Grant Hoffman</a></li>
@@ -317,7 +388,7 @@ TO accommodate that, we have moved the neo4j database connector into a separate 
 <p>Many customers have data stored in parquet format.
 Parquet is a columnar storage format that is optimized for reading and writing large datasets.
 We are happy to announce that nodestream now supports parquet as a first class citizen.</p>
-<p><strong>Check out the docs on it <a href="https://nodestream-proj.github.io/docs/docs/reference/extractors/#the-file-extractor-family">here</a></strong>.</p>
+<p><strong>Check out the docs on it <a href="https://nodestream-proj.github.io/docs/docs/reference/extractors/#the-file-extractor">here</a></strong>.</p>
 <p>Core Contributors to this feature include:</p>
 <ul>
 <li><a href="https://github.com/zprobst" target="_blank" rel="noopener noreferrer">Zach Probst</a></li>
