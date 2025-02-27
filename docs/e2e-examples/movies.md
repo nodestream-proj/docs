@@ -88,10 +88,12 @@ Open the `pipelines/ratings.yaml` file and delete the default content.
 Then, add the following content:
 
 ```yaml
-- implementation: nodestream.pipeline.extractors:FileExtractor
+- implementation: nodestream.pipeline.extractors.files:FileExtractor
   arguments:
-    globs:
-      - data/ratings.csv
+    sources:
+      - type: local
+        globs:
+          - data/ratings.csv
 ```
 
 This will tell the pipeline to extract the data from the `ratings.csv` file.
@@ -137,10 +139,12 @@ Open the `pipelines/movies.yaml` file and delete the default content.
 Then, add the following content:
 
 ```yaml
-- implementation: nodestream.pipeline.extractors:FileExtractor
+- implementation: nodestream.pipeline.extractors.files:FileExtractor
   arguments:
-    globs:
-      - data/movies.csv
+    sources:
+      - type: local
+        globs:
+          - data/movies.csv
 ```
 
 This will tell the pipeline to extract the data from the `movies.csv` file.
@@ -185,10 +189,12 @@ Open the `pipelines/tags.yaml` file and delete the default content.
 Then, add the following content:
 
 ```yaml
-- implementation: nodestream.pipeline.extractors:FileExtractor
+- implementation: nodestream.pipeline.extractors.local:FileExtractor
   argumenets:
-    globs:
-      - data/tags.csv
+    sources:
+      - type: local
+        globs:
+          - data/tags.csv
 ```
 
 This will tell the pipeline to extract the data from the `tags.csv` file.

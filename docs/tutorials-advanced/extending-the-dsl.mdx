@@ -129,10 +129,12 @@ Once the new file type is registered, it can be used in the DSL as a file extrac
 The file extractors will automatically be aware of and use the new file type.
 
 ```yaml
-- implementation: nodestream.pipeline.extractors:FileExtractor
+- implementation: nodestream.pipeline.extractors.files:FileExtractor
   arguments:
-    globs:
-      - data/*.tsv
+    sources:
+      - type: local
+        globs:
+          - data/*.tsv
 ```
 
 ## Creating an Interpretation

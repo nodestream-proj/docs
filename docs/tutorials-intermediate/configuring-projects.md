@@ -102,8 +102,10 @@ For example, lets say in a live environment we want to pull data from an API, bu
   annotations:
     - live
 
-- implementation: nodestream.pipeline.extractors:FileExtractor
+- implementation: nodestream.pipeline.extractors.files:FileExtractor
   arguments:
+    sources:
+      - type: local
     globs:
       - !env FILE_PATH
   annotations:
