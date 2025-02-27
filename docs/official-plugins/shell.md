@@ -74,10 +74,12 @@ curl https://example.com/api/data.json -X GET --header "Accept: application/json
       - O
     ignore_stdout: true #Do not provide output from command to next step in pipeline.
 
-- implementation: nodestream.pipeline.extractors:FileExtractor
+- implementation: nodestream.pipeline.extractors.files:FileExtractor
   arguments:
-    globs:
-    - data.json
+    sources:
+      - type: local
+        globs:
+        - data.json
 ```
 
 This is roughly equivalent to the following shell command:

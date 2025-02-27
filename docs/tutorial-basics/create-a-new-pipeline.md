@@ -86,10 +86,12 @@ The second section is to interpret the data into nodes and relationships.
 For now, leave the second section as it is and replace the first section with the following:
 
 ```yaml
-- implementation: nodestream.pipeline.extractors:FileExtractor
+- implementation: nodestream.pipeline.extractors.files:FileExtractor
   arguments:
-    globs:
-      - data/*.csv
+    sources:
+      - type: local
+        globs:
+          - data/*.csv
 ```
 
 This step uses the `FileExtractor` to load the data from the `data` directory in your project.
