@@ -130,6 +130,7 @@ The file extractors will automatically be aware of and use the new file type.
 
 ```yaml
 - implementation: nodestream.pipeline.extractors:FileExtractor
+  factory: local
   arguments:
     globs:
       - data/*.tsv

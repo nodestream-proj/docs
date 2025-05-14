@@ -103,6 +103,7 @@ For example, lets say in a live environment we want to pull data from an API, bu
     - live
 
 - implementation: nodestream.pipeline.extractors:FileExtractor
+  factory: local
   arguments:
     globs:
       - !env FILE_PATH

@@ -87,6 +87,7 @@ For now, leave the second section as it is and replace the first section with th
 
 ```yaml
 - implementation: nodestream.pipeline.extractors:FileExtractor
+  factory: local
   arguments:
     globs:
       - data/*.csv
