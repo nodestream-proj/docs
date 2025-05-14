@@ -8,7 +8,7 @@ The data set is available in different sizes, and we will use the smallest one, 
 
 ## Data
 
-The data is available [here](https://grouplens.org/datasets/movielens/100k/) as a zip file.
+The data is available [here](https://github.com/khanhnamle1994/movielens/archive/refs/heads/master.zip) as a zip file.
 When you unzip it, you will find 3 csv files: `ratings.csv`, `movies.csv`, and `tags.csv`.
 We'll ingest all three of these files into our graph.
 
@@ -89,6 +89,7 @@ Then, add the following content:
 
 ```yaml
 - implementation: nodestream.pipeline.extractors:FileExtractor
+  factory: local
   arguments:
     globs:
       - data/ratings.csv
@@ -138,6 +139,7 @@ Then, add the following content:
 
 ```yaml
 - implementation: nodestream.pipeline.extractors:FileExtractor
+  factory: local
   arguments:
     globs:
       - data/movies.csv
@@ -186,6 +188,7 @@ Then, add the following content:
 
 ```yaml
 - implementation: nodestream.pipeline.extractors:FileExtractor
+  factory: local
   argumenets:
     globs:
       - data/tags.csv
