@@ -36,17 +36,17 @@ const config = {
       ({
         docs: {
           sidebarPath: './sidebars.js',
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/nodesteram-proj/docs/tree/main/packages/create-docusaurus/templates/shared/',
+          editUrl: 'https://github.com/nodestream-proj/docs/tree/main/',
+          lastVersion: 'current',
+          versions: {
+            current: {
+              label: 'Next (main)',
+            },
+          },
         },
         blog: {
           showReadingTime: true,
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/nodesteram-proj/docs/tree/main/packages/create-docusaurus/templates/shared/',
+          editUrl: 'https://github.com/nodestream-proj/docs/tree/main/',
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -78,6 +78,10 @@ const config = {
             label: 'Docs',
           },
           {to: '/blog', label: 'Blog', position: 'left'},
+          {
+            type: 'docsVersionDropdown',
+            position: 'right',
+          },
           {
             href: 'https://github.com/nodestream-proj/nodestream',
             label: 'GitHub',

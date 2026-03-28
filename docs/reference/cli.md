@@ -1,6 +1,6 @@
 # Command Line Interface
 
-The `nodestream` CLI is the primary way to interact with the NodeStream project. 
+The `nodestream` CLI is the primary way to interact with the NodeStream project.
 It provides a number of commands to help you manage your project and run pipelines.
 
 
@@ -116,6 +116,13 @@ Options:
   -r, --reporting-frequency=REPORTING-FREQUENCY  How often to report progress [default: 1000]
   -s, --step-outbox-size=STEP-OUTBOX-SIZE        How many records to buffer in each step's outbox before blocking [default: 1000]
       --auto-migrate                             Ensure all specified targets are migrated before running specified pipelines
+      --storage-backend=STORAGE-BACKEND          Storage backend to use for checkpointing
+      --metrics-interval-in-seconds=SECONDS      Time interval to report metrics in seconds
+      --prometheus                               Enable the Prometheus metrics server
+      --prometheus-listen-port=PORT              The port to run the Prometheus metrics server on [default: "9090"]
+      --prometheus-listen-address=ADDRESS        The address to run the Prometheus metrics server on [default: "0.0.0.0"]
+      --prometheus-certfile=CERTFILE             The path to the certificate file for the Prometheus metrics server
+      --prometheus-keyfile=KEYFILE               The path to the key file for the Prometheus metrics server
   -h, --help                                     Display help for the given command. When no command is given display help for the list command.
   -q, --quiet                                    Do not output any message.
   -V, --version                                  Display this application version.
@@ -178,6 +185,70 @@ Options:
   -n, --no-interaction   Do not ask any interactive question.
   -v|vv|vvv, --verbose   Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug.
 ```
+### `explain schema`
+
+The `explain schema` command shows which pipelines in your project contribute to particular node and relationship types in your graph schema.
+
+```bash
+nodestream explain schema [options] [kind] [name]
+```
+
+You can use it in two ways:
+
+1. **Legacy positional arguments** (still supported for backwards compatibility):
+
+```bash
+nodestream explain schema node Person
+nodestream explain schema relationship LIKES
+```
+
+2. **New option-based interface** (recommended):
+
+```bash
+# All pipelines contributing to a node type across all scopes
+nodestream explain schema --node Person
+
+# Only pipelines in a single scope
+nodestream explain schema --node Person --scope api
+
+# All pipelines contributing to a relationship type across all scopes
+nodestream explain schema --relationship LIKES
+
+# Intersection: only pipelines that contribute to BOTH the node and relationship type
+nodestream explain schema --node Person --relationship LIKES
+```
+
+When pipelines are found, the output is formatted similarly to `nodestream show`:
+
+- A descriptive header indicating which types and scopes are being explained.
+- A table with columns for `scope`, `name`, the full pipeline `file` path, `targets`, and `annotations`.
+
+All possible options are:
+
+```plaintext
+Usage:
+  explain schema [options] [--] [<kind> [<name>]]
+
+Arguments:
+  kind                             The kind of type to explain ('node' or 'relationship').
+  name                             The node or relationship type name (deprecated when using --node/--relationship).
+
+Options:
+  -p, --project=PROJECT            The project file (nodestream.yaml) to load.
+  -s, --scope=SCOPE                Limit the explanation to a single scope (defaults to all scopes).
+      --node=NODE                  Explain pipelines contributing to the given node type. May be combined with --relationship to show only pipelines that contribute to both.
+      --relationship=RELATIONSHIP  Explain pipelines contributing to the given relationship type. May be combined with --node to show only pipelines that contribute to both.
+  -h, --help                       Display help for the given command. When no command is given display help for the list command.
+  -q, --quiet                      Do not output any message.
+  -V, --version                    Display this application version.
+      --ansi                       Force ANSI output.
+      --no-ansi                    Disable ANSI output.
+  -n, --no-interaction             Do not ask any interactive question.
+  -v|vv|vvv, --verbose             Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug.
+```
+
+
+
 
 ### `show`
 
@@ -207,7 +278,7 @@ Options:
 ### `audit ttls`
 
 The `audit ttls` command is used to audit the TTLs of the project.
-It will output a list of object types that do not have a TTL set, as well as a list of object types that have a TTL set that do not exist in the project. 
+It will output a list of object types that do not have a TTL set, as well as a list of object types that have a TTL set that do not exist in the project.
 The former of which will exit with a non-zero status code (error). The latter will not (warning only).
 
 ```bash
@@ -303,4 +374,43 @@ Options:
       --no-ansi          Disable ANSI output.
   -n, --no-interaction   Do not ask any interactive question.
   -v|vv|vvv, --verbose   Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug.
+```
+
+### `migrations squash`
+
+The `migrations squash` command collapses a range of existing migrations into a single migration. This is useful for keeping the migrations directory tidy after a project has accumulated many incremental migrations.
+
+```bash
+nodestream migrations squash --from <migration-name> [--to <migration-name>] [flags]
+```
+
+All possible options are:
+
+```plaintext
+Usage:
+  migrations squash [options]
+
+Options:
+  -p, --project=PROJECT  The project file (nodestream.yaml) to load.
+      --from=FROM        The name of the migration to squash from. (required)
+      --to=TO            The name of the migration to squash to. Defaults to the latest migration if omitted.
+  -h, --help             Display help for the given command. When no command is given display help for the list command.
+  -q, --quiet            Do not output any message.
+  -V, --version          Display this application version.
+      --ansi             Force ANSI output.
+      --no-ansi          Disable ANSI output.
+  -n, --no-interaction   Do not ask any interactive question.
+  -v|vv|vvv, --verbose   Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug.
+```
+
+Example — squash all migrations from `initial` through the latest:
+
+```bash
+nodestream migrations squash --from initial
+```
+
+Example — squash a specific range:
+
+```bash
+nodestream migrations squash --from add_users --to add_relationships
 ```

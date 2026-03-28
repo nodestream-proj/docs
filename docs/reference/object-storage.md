@@ -27,8 +27,8 @@ storage:
 
 It is strongly recommend that you: 
 
-- Use a `hmack_key` to encrypt your data.
-- Use a secure method to store your `hmac_key` such as a secret manager or environment variable. 
+- Use a `hmac_key` to encrypt your data.
+- Use a secure method to store your `hmac_key` such as a secret manager or environment variable.
 
 ## Usage
 After configuring object storage, you can use it by passing the `--object-storage` flag to your pipeline execution. 

@@ -12,11 +12,11 @@ From the results of the shell command, you can then use the output to process fu
 
 ## Maturity
 
-This plugin is currently in **STABLE** and should be fine for production use.
+This plugin is currently **IN DEVELOPMENT** and is not yet ready for production use.
 
 ## Pre-requisites
 
-Currently, there are no major pre-requisites for this plugin.
+- Python `^3.10`
 
 ## Features
 

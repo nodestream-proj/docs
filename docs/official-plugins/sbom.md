@@ -16,7 +16,8 @@ This plugin is currently is **PREVIEW** and should not be for production without
 
 ## Pre-requisites
 
-There are no pre-requisites to use the SBOM plugin aside from having a project to use it with.
+- Python `>=3.10,<4.0`
+- A nodestream project to use it with
 
 ## Features
 

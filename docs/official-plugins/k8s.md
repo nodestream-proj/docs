@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # Kubernetes
 
-Auotmatically provsiion and manage Kubernetes resources to run nodestream pipelines.
+Automatically provision and manage Kubernetes resources to run nodestream pipelines.
 
 ## Introduction
 
@@ -14,7 +14,8 @@ This plugin is currently in **PRE-ALPHA** and is not yet recommended for product
 
 ## Pre-requisites
 
-Currently, there are no major pre-requisites for this plugin. 
+- Python `^3.10`
+- A running Kubernetes cluster with appropriate RBAC permissions
 
 ## Features
 
@@ -60,7 +61,7 @@ scopes:
        pipelines:
           - path: pipelines/perpetual/my_kafka_pipeline.yaml
             annotations:
-              nodestream_plugin_k8s_conccurency: 1
+              nodestream_plugin_k8s_concurrency: 1
 ```
 
 ### 3. Run the following command to deploy the project to the cluster.
