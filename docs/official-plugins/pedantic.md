@@ -15,7 +15,8 @@ This plugin is currently is **STABLE** and should be fine for production use.
 
 ## Pre-requisites
 
-There are no pre-requisites to use the Pedantic plugin aside from having a project to use it with.
+- Python `^3.10`
+- A nodestream project to use it with
 
 ## Features
 

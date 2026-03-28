@@ -16,7 +16,8 @@ This plugin is currently in **STABLE** and should be fine for production use.
 
 ## Pre-requisites
 
-To use the dotenv plugin, you'll need to have a `.env` file in the root of your project.
+- Python `^3.10`
+- A `.env` file in the root of your project
 
 ## Features
 

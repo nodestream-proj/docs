@@ -18,8 +18,9 @@ This plugin is currently in **BETA** and is not yet recommended for production u
 
 ## Pre-requisites
 
-To use Akamai with Nodestream, you'll need to have an Akamai account and the necessary permissions to access the Akamai APIs.
-You need to create an API client in the Akamai Control Center and obtain the client credentials.
+- Python `>=3.11,<4.0`
+- An Akamai account with the necessary permissions to access the Akamai APIs
+- An API client created in the Akamai Control Center with client credentials
 
 ## Features
 
